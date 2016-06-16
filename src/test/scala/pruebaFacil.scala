@@ -12,5 +12,6 @@ class pruebaFacil {
   @Test
   def test(): Unit = {
     assertEquals(1, foo.unidad())
+    assertEquals(2, foo.unidad()+1)
   }
 }
