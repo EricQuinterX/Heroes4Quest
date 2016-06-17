@@ -2,24 +2,25 @@
   * Created by Eric on 17/06/2016.
   */
 
+import java.util
+
 import org.junit.Assert.assertEquals
 import org.junit.{Before, Test}
 
 class Heroe_test {
   @Before
-  val cascoVikingo = (unHeroe: Heroe) => unHeroe.stat.fuerza > 30
+  val cascoVikingo = (unHeroe: Heroe) => unHeroe.stats.fuerza > 30
 
   @Test
   def evaluarHeroe() = {
     val item1 = new Item("Estada", 100, cascoVikingo)
-    val estado = new Stat(20)
-    val arturo = new Heroe("arturo", estado, List())
+    val estado = new Stats(0,50,0,0)
+    val arturo = new Heroe("arturo", estado)
 
-    assertEquals(arturo.inventory.length, 0)
     arturo.agregarItem(item1)
-    assertEquals(arturo.inventory.length, 1)
-//    val jorge = arturo.copy()
-    assertEquals(arturo.stat.fuerza, 20)
+
+    assertEquals(arturo.inventory.size, 1)
+    assertEquals(arturo.stats.fuerza, 50)
 
   }
 }

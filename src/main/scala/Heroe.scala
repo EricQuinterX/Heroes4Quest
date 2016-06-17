@@ -1,17 +1,4 @@
-/**
-  * Created by Eric on 17/06/2016.
-  */
-
-class Stat (val fuerza: Int){
-
-
-}
-
-//val nuevoStat = unHeroe.stat.copy(fuerza + 10)
-//val nuevoHeroe = unHeroe.copy(nuevoStat)
-//return nuevoHeroe
-
-
+import scala.collection.mutable.Set
 
 
 class Item (val name: String, val precio: Int, val restriccion: (Heroe) => Boolean){
@@ -19,12 +6,13 @@ class Item (val name: String, val precio: Int, val restriccion: (Heroe) => Boole
 }
 
 
-class Heroe (val name: String, val stat: Stat, var inventory: List[Item]){
+class Heroe (val name: String, val stats: Stats){
+
+  var inventory: Set[Item] = Set[Item]()
 
   def agregarItem(item: Item) = {
     if (item.validarRestriccion(this)){
-
-      inventory :+ item
+      inventory.add(item)
     }
   }
 
