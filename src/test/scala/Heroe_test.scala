@@ -1,26 +1,20 @@
-/**
-  * Created by Eric on 17/06/2016.
-  */
-
-import java.util
-
+import scala.collection.mutable.Set
 import org.junit.Assert.assertEquals
 import org.junit.{Before, Test}
 
 class Heroe_test {
-  @Before
-  val cascoVikingo = (unHeroe: Heroe) => unHeroe.stats.fuerza > 30
+ // @Before
+  //val cascoVikingo = (unHeroe: Heroe) => unHeroe.stats.fuerza > 30
 
   @Test
   def evaluarHeroe() = {
-    val item1 = new Item("Estada", 100, cascoVikingo)
-    val estado = new Stats(0,50,0,0)
-    val arturo = new Heroe("arturo", estado)
-
-    arturo.agregarItem(item1)
-
-    assertEquals(arturo.inventory.size, 1)
-    assertEquals(arturo.stats.fuerza, 50)
+    val unStats:Stats=new Stats(15,50,15,15)
+    val lista:Set[Item]=Set[Item]()
+    val unInventario:Inventario=new Inventario(lista)
+    val Alvaro:Heroe=new Heroe(unStats,null, unInventario)
+    val casco:Item= CascoVikingo()
+    Alvaro.agregarItem(casco)
+    assertEquals(Alvaro.hp, 25)
 
   }
 }
