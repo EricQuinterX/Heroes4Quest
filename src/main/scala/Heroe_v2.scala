@@ -49,7 +49,7 @@ case object Pecho extends Posicion
 case object Cuello extends Posicion
 
 // Heroe
-case class Heroe (stats: Stats, var inventario: Inventario = new Inventario(), var trabajo: Option[Trabajo] = None){
+case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario()){
 
   def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) => x == unTrabajo; case None => false}
 
@@ -120,11 +120,26 @@ case class Item(name: String, precio: Int, parte: Posicion, efecto: (Heroe => St
 }
 
 
-
+/* Equipo
+Consideraciones:
+  - Cuando se crea un equipo, se podra o no definir los heroes
+  - No se debera meter luego de haber creado al equipo, a excepcion que se unan heroes
+   despues de realizar misiones como recompensa.
+ */
 case class Equipo (name: String, var heroes: List[Heroe]) {
 
   var pozoDeOro: Int = 0
-  var lider: Option[Heroe] = None
+  def lider(): Option[Heroe] = heroes match {
+    case Nil => None
+    case p1 :: Nil => Some(p1)
+    case x =>
+      val lider1 = heroes.maxBy(_.atributoPrincipal())
+      val lider2 = heroes.filter(_ != lider1).maxBy(_.atributoPrincipal())
+      if (lider1.atributoPrincipal()==lider2.atributoPrincipal())
+        None
+      else
+        Some(lider1)
+  }
 
   def mejorHeroeSegun(f: Heroe => Int) = heroes.maxBy(f(_))
 
@@ -139,26 +154,17 @@ case class Equipo (name: String, var heroes: List[Heroe]) {
 
   def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
 
-  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe): Unit = heroes = nuevoHeroe :: heroes.filter(_ == viejoHeroe)
-
-  def nuevoLider(equipo: List[Heroe]) = {
-    heroes match {
-      case Nil => lider = None
-      case p1 :: Nil => lider = Some(p1)
-      case x =>
-        val lider1 = heroes.maxBy(_.atributoPrincipal())
-        val lider2 = heroes.filter(_ != lider1).maxBy(_.atributoPrincipal())
-        if (lider1.atributoPrincipal()==lider2.atributoPrincipal())
-          lider = None
-        else
-          lider = Some(lider1)
-    }
-  }
+  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = heroes = nuevoHeroe :: heroes.filter(_ != viejoHeroe)
 }
 
-class Tarea(){}
 
-class Mision (tareas: List[Tarea]){
+class Tarea (fxFacilidad: (Heroe => Int), efecto: (Heroe => Unit), equipo: Equipo){
+//  def elegirAlHeroe(): Heroe = {
+//
+//  }
+}
+
+class Mision (tareas: List[Tarea], equipo: Equipo, beneficio: (Equipo => Unit)){
 
 
 }
