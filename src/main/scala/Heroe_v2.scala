@@ -1,7 +1,6 @@
 import collection.{mutable => m}
 
 
-
 // Stats
 case class Stats (hp: Int,
                   fuerza: Int,
@@ -121,50 +120,44 @@ case class Item(name: String, precio: Int, parte: Posicion, efecto: (Heroe => St
 
 
 
-class Equipo {
+case class Equipo (name: String, var heroes: List[Heroe]) {
 
-  var heroes: m.Set[Heroe] = m.Set.empty
   var pozoDeOro: Int = 0
   var lider: Option[Heroe] = None
 
-  def mejorHeroeSegun(f: Heroe => Int) : Heroe = {
-    heroes.foldLeft(heroes.head) ((a,b) =>
-      f(a) >= f(b) match {
-        case true => a
-        case false => b
-      })
-  }
+  def mejorHeroeSegun(f: Heroe => Int) = heroes.maxBy(f(_))
 
   def obtieneItem(item: Item): Unit = {
     if (heroes.isEmpty) return
-
-    val alguien: Heroe = heroes.foldLeft(heroes.head)((heroe1, heroe2) =>
-      if (item.validarCondicion(heroe1) && item.validarCondicion(heroe2)) {
-        heroe1.nivelMejora(item) > heroe2.nivelMejora(item) match {
-          case true => heroe1
-          case false => heroe2
-        }
-      }
-      else if (item.validarCondicion(heroe1) && heroe1.nivelMejora(item) > 0) heroe1
-      else if (item.validarCondicion(heroe2) && heroe2.nivelMejora(item) > 0) heroe2
-      else heroe1
-    )
-    alguien.nivelMejora(item) > 0 && item.validarCondicion(alguien) match {
-      case true => alguien.equiparseItem(item)
-      case false => pozoDeOro += item.precio
+    heroes.filter(h => h.nivelMejora(item) > 0 && item.validarCondicion(h)) match {
+      case Nil => pozoDeOro += item.precio
+      case x :: Nil => x.equiparseItem(item)
+      case hs => hs.maxBy(_.nivelMejora(item)).equiparseItem(item)
     }
   }
 
-  def obtieneMiembro(unHeroe: Heroe): Unit = {
+  def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
 
-  }
+  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe): Unit = heroes = nuevoHeroe :: heroes.filter(_ == viejoHeroe)
 
-  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe): Unit = {
-
-  }
-
-  def nuevoLider(): Unit ={
-
+  def nuevoLider(equipo: List[Heroe]) = {
+    heroes match {
+      case Nil => lider = None
+      case p1 :: Nil => lider = Some(p1)
+      case x =>
+        val lider1 = heroes.maxBy(_.atributoPrincipal())
+        val lider2 = heroes.filter(_ != lider1).maxBy(_.atributoPrincipal())
+        if (lider1.atributoPrincipal()==lider2.atributoPrincipal())
+          lider = None
+        else
+          lider = Some(lider1)
+    }
   }
 }
 
+class Tarea(){}
+
+class Mision (tareas: List[Tarea]){
+
+
+}
