@@ -36,7 +36,12 @@ class Heroes4Quest_test {
   val efecto_talismanMinimalista = (h: Heroe) => h.stats.subirHp(50 - 10 * (h.inventario.cantidadItems - 1))
 
   val condicion_vinchaBufaloAgua = (h: Heroe) => h.trabajo match {case Some(_) => false; case None => true}
-//  val efecto_vinchaBufaloAgua = (h: Heroe) => ... consulta enviada a los ayudantes
+  val efecto_vinchaBufaloAgua = (h: Heroe) =>
+    if (h.atributos().fuerza>h.atributos().inteligencia){
+      h.atributos().subirInteligencia(30)}  //??? lo hago asi para que no sea solamente al stat base
+    else {
+      h.atributos().subirATodosMenosInteligencia(10)  //??? lo hago asi para que no sea solamente al stat base
+  }
 
 
 //  Items
