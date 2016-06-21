@@ -3,8 +3,8 @@ import collection.{mutable => m}
 //Items
 case class Item(name: String, precio: Int, parte: Posicion, efecto: (Heroe => Stats), condicion: (Heroe => Boolean)){
 
-  def validarCondicion(unHeroe:Heroe):Boolean = condicion(unHeroe)
   def aplicarEfecto(h: Heroe): Heroe = h.copy(stats = efecto(h))
+  def validarCondicion(unHeroe:Heroe):Boolean = condicion(unHeroe)
 }
 
 case class Inventario(var items: m.Set[Item] = m.Set[Item]().empty){
@@ -33,12 +33,21 @@ case class Inventario(var items: m.Set[Item] = m.Set[Item]().empty){
     items.foldLeft (h2) ((a,i) => i.aplicarEfecto(a)).stats.verificarNoNegativos()// regreso los nuevos atributos
   }
 
-  def reemplazaritemM(item: Item): Unit = { // hace efecto colateral sobre la lista de items
+  def reemplazarItem(item: Item): Unit = { // hace efecto colateral sobre la lista de items
     items find (x => x.parte == item.parte && x.parte != Cuello) match {
       case Some(x) => items -= x
       case _ => ;
     }
     items += item
+  }
+
+  def validarDescarte(item: Item): Boolean = {
+    items.contains(item)
+  }
+
+
+  def descartarItem(item: Item): Unit = {
+    items -= item
   }
 
 }
