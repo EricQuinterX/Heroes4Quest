@@ -5,26 +5,26 @@ class ItemsTest {
 
   //  Condiciones y Efectos de los Items
   val condicion_cascoVikingo = (h: Heroe) => h.stats.fuerza > 30
-  val efecto_cascoVikingo = (h: Heroe) => h.stats.subirHp(10)
+  val efecto_cascoVikingo    = (h: Heroe) => h.stats.subirHp(10)
 
   val condicion_palitoMagico = (h: Heroe) => h.trabajaDe(Mago) || (h.trabajaDe(Ladron) && h.stats.inteligencia > 30)
-  val efecto_palitoMagico = (h: Heroe) => h.stats.subirInteligencia(20)
+  val efecto_palitoMagico    = (h: Heroe) => h.stats.subirInteligencia(20)  //Todo: falta el tema de las manos(jorge)
 
   val condicion_armaduraEleganteSport = (h: Heroe) => true
-  val efecto_armaduraEleganteSport = (h: Heroe) => {h.stats.subirVelocidad(30); h.stats.subirHp(-30)}
+  val efecto_armaduraEleganteSport    = (h: Heroe) => {h.stats.subirVelocidad(30); h.stats.subirHp(-30)}
 
   val condicion_arcoViejo = (h: Heroe) => true
-  val efecto_arcoViejo = (h: Heroe) => h.stats.subirFuerza(2)
+  val efecto_arcoViejo    = (h: Heroe) => h.stats.subirFuerza(2)
 
   val condicion_escudoAntiRobo = (h: Heroe) => !(h.trabajaDe(Ladron) || h.stats.fuerza < 20)
-  val efecto_escudoAntiRobo = (h: Heroe) => h.stats.subirHp(20)
+  val efecto_escudoAntiRobo    = (h: Heroe) => h.stats.subirHp(20) //Todo: falta el tema de las manos(jorge)
 
   val condicion_talismanDedicacion = (h: Heroe) => true
-  val efecto_talismanDedicacion = (h: Heroe) => {
+  val efecto_talismanDedicacion    = (h: Heroe) => {
     val subida = {
       h.trabajo match {
-        case Some(x) => x.valorAtributoPrincipal() * 0.1;
-        case None => 0
+      case Some(x) => x.valorAtributoPrincipal() * 0.1;
+      case None => 0
       }
     }
     val redondeo = math.ceil(subida).toInt
@@ -32,19 +32,33 @@ class ItemsTest {
   }
 
   val condicion_talismanMinimalista = (h: Heroe) => true
-  val efecto_talismanMinimalista = (h: Heroe) => h.stats.subirHp(50 - 10 * (h.inventario.cantidadItems - 1))
+  val efecto_talismanMinimalista    = (h: Heroe) => h.stats.subirHp(50 - 10 * (h.inventario.cantidadItems - 1))
 
   val condicion_vinchaBufaloAgua = (h: Heroe) => h.trabajo.isEmpty // si no esta trabajando
-  val efecto_vinchaBufaloAgua = (h: Heroe) =>
+  val efecto_vinchaBufaloAgua    = (h: Heroe) =>
       if (h.atributos().fuerza>h.atributos().inteligencia){
         h.atributos().subirInteligencia(30)}  //??? lo hago asi para que no sea solamente al stat base
       else {
         h.atributos().subirATodosMenosInteligencia(10)  //??? lo hago asi para que no sea solamente al stat base
       }
-  val condicion_espadaDeLaVida = (h:Heroe) => true  //by jon
+
+
+
+ /* val condicion_vichaDelBufaloDeAgua = ???
+  val efecto_vichaDelBufaloDeAgua    = ???
+
+  val condicion_talismanMaldito = ???
+  val efecto_talismanMaldito    = ???*/
+
+  val condicion_espadaDeLaVida = (h:Heroe) => true
   val efecto_espadaDeLaVida = (h:Heroe) => h.stats.fuerzaIgualarA(h.stats.hp) //by jon: es sobre
 
-  //  Items
+
+
+
+
+
+  //  Son 10 items en el enunciado
   val cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
   val palitoMagico = new Item("Palito Magico", 150, Mano(1), efecto_palitoMagico, condicion_palitoMagico)
   val armaduraEleganteSport = new Item("Armadura Elegante Sport", 300, Pecho, efecto_armaduraEleganteSport, condicion_armaduraEleganteSport)
@@ -52,7 +66,9 @@ class ItemsTest {
   val escudoAntiRobo = new Item("Escudo Anti-Robo", 500, Mano(1), efecto_escudoAntiRobo, condicion_escudoAntiRobo)
   val talismanDedicacion = new Item("Talisman de Dedicacion", 300, Cuello, efecto_talismanDedicacion, condicion_talismanDedicacion)
   val talismanMinimalista = new Item("Talisman Minimalista", 50, Cuello, efecto_talismanMinimalista, condicion_talismanMinimalista)
-  val espadaDeLaVida = new Item("Espada de la Vida",500,Mano(1),efecto_espadaDeLaVida,condicion_espadaDeLaVida) //by jon
+  //val vinchaDelBufaloDeAgua = new Item("Vincha del Bufalo de Agua", 100, Cabeza, efecto_vichaDelBufaloDeAgua, condicion_vichaDelBufaloDeAgua)
+  //val talismanMaldito = new Item("Talisman Maldito", 1000, Cuello, efecto_talismanMaldito, condicion_talismanMaldito)
+  val espadaDeLaVida = new Item("Espada de la Vida",500,Mano(1),efecto_espadaDeLaVida,condicion_espadaDeLaVida)
 
 
   @Test
