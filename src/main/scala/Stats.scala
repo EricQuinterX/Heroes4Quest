@@ -13,6 +13,7 @@ case class Stats (hp: Int, fuerza: Int, velocidad: Int, inteligencia: Int){
   def subirInteligencia(i: Int): Stats = copy(inteligencia= inteligencia + i)
   def subirVelocidad(i: Int): Stats = copy(velocidad= velocidad + i)
   def subirATodosMenosInteligencia(i: Int): Stats = copy(velocidad= velocidad + i ,fuerza= fuerza + i,hp = hp + i )// Que pasa si seguimos añadiendo restricciones?
+  def fuerzaIgualarA(i: Int): Stats = copy(fuerza = i)//by jon: Que pasa si seguimos añadiendo restricciones?
 
   def verificarNoNegativos(): Stats= {
     if (hp < 1) copy(hp = 1).verificarNoNegativos()

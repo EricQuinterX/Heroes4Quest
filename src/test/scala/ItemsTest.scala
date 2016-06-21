@@ -20,8 +20,6 @@ class ItemsTest {
   val efecto_escudoAntiRobo = (h: Heroe) => h.stats.subirHp(20)
 
   val condicion_talismanDedicacion = (h: Heroe) => true
-
-
   val efecto_talismanDedicacion = (h: Heroe) => {
     val subida = {
       h.trabajo match {
@@ -43,7 +41,8 @@ class ItemsTest {
       else {
         h.atributos().subirATodosMenosInteligencia(10)  //??? lo hago asi para que no sea solamente al stat base
       }
-
+  val condicion_espadaDeLaVida = (h:Heroe) => true  //by jon
+  val efecto_espadaDeLaVida = (h:Heroe) => h.stats.fuerzaIgualarA(h.stats.hp) //by jon: es sobre
 
   //  Items
   val cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
@@ -53,7 +52,7 @@ class ItemsTest {
   val escudoAntiRobo = new Item("Escudo Anti-Robo", 500, Mano(1), efecto_escudoAntiRobo, condicion_escudoAntiRobo)
   val talismanDedicacion = new Item("Talisman de Dedicacion", 300, Cuello, efecto_talismanDedicacion, condicion_talismanDedicacion)
   val talismanMinimalista = new Item("Talisman Minimalista", 50, Cuello, efecto_talismanMinimalista, condicion_talismanMinimalista)
-
+  val espadaDeLaVida = new Item("Espada de la Vida",500,Mano(1),efecto_espadaDeLaVida,condicion_espadaDeLaVida) //by jon
 
 
   @Test
@@ -78,4 +77,34 @@ class ItemsTest {
     assertEquals(lucas.inventario.cantidadItems, 3)
     assertEquals(lucas.atributos(),new Stats(56,33,41,31))
   }
+
+  @Test //by jon: (Pregunta hecha a los ayudantes) falta verificar si lo que añade el talisman de dedicacion es al acumulado o el del trabajo
+  def asignarTrabajoItems2(): Unit = {
+    val lucas = new Heroe(new Stats(30,30,30,30))
+    lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
+    lucas.equiparseItem(arcoViejo) // (25,32,40,30)
+    lucas.equiparseItem(talismanDedicacion) // (26,33,41,31) //vemos que añade solo el del trabajo
+    assertEquals(lucas.atributos(),new Stats(26,33,41,31))
+  }
+
+  @Test //by jon: Hecho el test puedo agregar el item pero no puedo calcular sus atributos => habria que validar un "pisada" si omitirla o pisar al anterior
+  def asignarTrabajoItemsPisarItems(): Unit = {
+    val lucas = new Heroe(new Stats(30,30,30,30))
+    lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
+    lucas.equiparseItem(arcoViejo) // (25,32,40,30)
+    lucas.equiparseItem(talismanDedicacion) // (26,33,41,31)
+    lucas.equiparseItem(espadaDeLaVida) // (26,33,41,31)  //veremos que efecto tiene poner un item encima de otro
+    //assertEquals(lucas.atributos(),new Stats(26,26,41,31))
+    assertEquals(lucas.inventario.cantidadItems, 3)
+  }
+  @Test //by jon: testeo que el efecto lo hace correctamente sobre el acumulado
+  def ProbandoespadaDeLaVida(): Unit = {
+    val lucas = new Heroe(new Stats(30,30,30,30))
+    lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
+    lucas.equiparseItem(talismanDedicacion) // (26,31,41,31)
+    lucas.equiparseItem(espadaDeLaVida) // (26,33,41,31)
+    assertEquals(lucas.atributos(),new Stats(26,26,41,31))
+   // assertEquals(lucas.inventario.cantidadItems, 3)
+  }
+
 }
