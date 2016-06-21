@@ -13,8 +13,6 @@ class ItemsTest {
   val condicion_armaduraEleganteSport = (h: Heroe) => true
   val efecto_armaduraEleganteSport    = (h: Heroe) => h.stats.subirHp(-30).subirVelocidad(30)
 
-
-
   val condicion_arcoViejo = (h: Heroe) => true
   val efecto_arcoViejo    = (h: Heroe) => h.stats.subirFuerza(2)
 
@@ -202,7 +200,41 @@ class ItemsTest {
   }
 
 
-  
+  //Test para ArcoViejo : total=1
+  @Test
+  def arcoViejo_Equiarse_Hereo(): Unit = {
+    val jonny = new Heroe(new Stats  (10,50,5,50))
+    jonny.equiparseItem(arcoViejo)// (0,+2,0,0)
+    assertEquals(jonny.atributos().fuerza,52)
+  }
+
+
+  //Test para Escudo AntiRobo : total=3
+  @Test
+  def escudo_AntiRobo_CumpleCondicion(): Unit = {
+    val jonny = new Heroe(new Stats  (10,50,5,50))
+    jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
+    assertEquals(jonny.atributos().hp,30)
+  }
+
+  @Test
+  def escudo_AntiRobo_No_CumpleCondicion_Por_Ladron(): Unit = {
+    val jonny = new Heroe(new Stats  (10,50,5,50))
+    jonny.adquirirTrabajo(Ladron)    //(-5,0,10,0)
+    jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
+    assertEquals(jonny.atributos().hp,5)
+    assertEquals(jonny.atributos().velocidad,15)
+  }
+
+
+  @Test
+  def escudo_AntiRobo_No_CumpleCondicion_Por_Debil(): Unit = {
+    val jonny = new Heroe(new Stats  (10,10,5,50))
+    jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
+    assertEquals(jonny.atributos().hp,10)
+  }
+
+
 
 
 
