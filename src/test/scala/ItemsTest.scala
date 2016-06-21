@@ -8,16 +8,18 @@ class ItemsTest {
   val efecto_cascoVikingo    = (h: Heroe) => h.stats.subirHp(10)
 
   val condicion_palitoMagico = (h: Heroe) => h.trabajaDe(Mago) || (h.trabajaDe(Ladron) && h.stats.inteligencia > 30)
-  val efecto_palitoMagico    = (h: Heroe) => h.stats.subirInteligencia(20)  //Todo: falta el tema de las manos(jorge)
+  val efecto_palitoMagico    = (h: Heroe) => h.stats.subirInteligencia(20)
 
   val condicion_armaduraEleganteSport = (h: Heroe) => true
-  val efecto_armaduraEleganteSport    = (h: Heroe) => {h.stats.subirVelocidad(30); h.stats.subirHp(-30)}
+  val efecto_armaduraEleganteSport    = (h: Heroe) => h.stats.subirHp(-30).subirVelocidad(30)
+
+
 
   val condicion_arcoViejo = (h: Heroe) => true
   val efecto_arcoViejo    = (h: Heroe) => h.stats.subirFuerza(2)
 
   val condicion_escudoAntiRobo = (h: Heroe) => !(h.trabajaDe(Ladron) || h.stats.fuerza < 20)
-  val efecto_escudoAntiRobo    = (h: Heroe) => h.stats.subirHp(20) //Todo: falta el tema de las manos(jorge)
+  val efecto_escudoAntiRobo    = (h: Heroe) => h.stats.subirHp(20)
 
   val condicion_talismanDedicacion = (h: Heroe) => true
   val efecto_talismanDedicacion    = (h: Heroe) => {
@@ -71,31 +73,141 @@ class ItemsTest {
   val espadaDeLaVida = new Item("Espada de la Vida",500,Mano(1),efecto_espadaDeLaVida,condicion_espadaDeLaVida)
 
 
+
+
+  //Test para validar Items en general
   @Test
-  def asignarItems(): Unit = {
+  def _equiparItem(): Unit = {
     val jonny = new Heroe(new Stats(50,50,50,50))
     jonny.equiparseItem(cascoVikingo)
     assertEquals(jonny.inventario.cantidadItems, 1)
+   }
+
+  @Test
+  def _equiparItem_Duplicados(): Unit = {
+    val jonny = new Heroe(new Stats(50,50,50,50))
+    jonny.equiparseItem(cascoVikingo)
+    jonny.equiparseItem(cascoVikingo)
+    jonny.equiparseItem(cascoVikingo)
+    assertEquals(jonny.inventario.cantidadItems, 1)
     assertEquals(jonny.atributos().hp,60)
-    jonny.equiparseItem(talismanMinimalista)
-    assertEquals(jonny.inventario.cantidadItems, 2)
-    assertEquals(jonny.atributos().hp, 100) // +40 = 50 - 10(un item tenia)
-    assertEquals(jonny.stats, new Stats(50,50,50,50)) // stat original
   }
 
   @Test
-  def asignarTrabajoItems(): Unit = {
-    val lucas = new Heroe(new Stats(30,30,30,30))
-    lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
-    lucas.equiparseItem(arcoViejo) // (25,32,40,30)
-    lucas.equiparseItem(talismanDedicacion) // (26,33,41,31)
-    lucas.equiparseItem(talismanMinimalista) // (56,33,41,31) + 30hp
-    assertEquals(lucas.inventario.cantidadItems, 3)
-    assertEquals(lucas.atributos(),new Stats(56,33,41,31))
+  def _descartarItem_Que_No_Existe_en_el_Inventario(): Unit = {
+    val jonny = new Heroe(new Stats(50,50,50,50))
+    jonny.descartarItem(cascoVikingo)
+    assertEquals(jonny.inventario.cantidadItems, 0)
   }
 
+  @Test
+  def _descartarItem_Que_Existe_en_el_Inventario(): Unit = {
+    val jonny = new Heroe(new Stats(50,50,50,50))
+    jonny.equiparseItem(cascoVikingo)
+    assertEquals(jonny.atributos().hp,60)
+    jonny.descartarItem(cascoVikingo)
+    assertEquals(jonny.inventario.cantidadItems, 0)
+    assertEquals(jonny.atributos().hp,50)
+  }
+
+
+
+  //Test para cascoVikingo: total=3
+  @Test
+  def cascoVikingo_CumpleCondicion(): Unit = {
+    val jonny = new Heroe(new Stats(50,50,50,50))
+    jonny.equiparseItem(cascoVikingo)
+    assertEquals(jonny.atributos().hp,60)
+    assertEquals(jonny.stats, new Stats(50,50,50,50))
+  }
+  @Test
+  def cascoVikingo_No_CumpleCondicion(): Unit = {
+    val jonny = new Heroe(new Stats(10,5,50,50))
+    jonny.equiparseItem(cascoVikingo)
+    assertEquals(jonny.atributos().hp,10)
+    assertEquals(jonny.inventario.cantidadItems, 0)
+  }
+
+  @Test
+  def cascoVikingo_Con_Trabajo_Guerrero(): Unit = {
+    val jonny = new Heroe(new Stats   (100,50,50,50))
+    jonny.adquirirTrabajo(Guerrero) //(10,15,0,-10)
+    jonny.equiparseItem(cascoVikingo)//(10,0,0,0)
+    assertEquals(jonny.atributos().hp,120)
+    assertEquals(jonny.inventario.cantidadItems, 1)
+  }
+
+
+  //Test para PalitoMagico : total=4
+  @Test
+  def palitoMagico_CumpleCondicion_Mago(): Unit = {
+    val jonny = new Heroe(new Stats  (50,50,50,50))
+    jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
+    jonny.equiparseItem(palitoMagico)// (0,0,0,20)
+    assertEquals(jonny.atributos().fuerza,30)
+    assertEquals(jonny.atributos().inteligencia,90)
+    assertEquals(jonny.stats, new Stats(50,50,50,50))
+  }
+
+  @Test
+  def palitoMagico_CumpleCondicion_Ladron(): Unit = {
+    val jonny = new Heroe(new Stats  (50,50,50,50))
+    jonny.adquirirTrabajo(Ladron)     //(-5,0,10,0)
+    jonny.equiparseItem(palitoMagico)// (0,0,0,20)
+    assertEquals(jonny.atributos().hp,45)
+    assertEquals(jonny.atributos().inteligencia,70)
+    assertEquals(jonny.atributos().velocidad,60)
+    assertEquals(jonny.inventario.cantidadItems, 1)
+  }
+
+  @Test
+  def palitoMagico_No_CumpleCondicion(): Unit = {
+    val jonny = new Heroe(new Stats  (50,50,50,50))
+    jonny.adquirirTrabajo(Guerrero)   //(10,15,0,-10)
+    jonny.equiparseItem(palitoMagico)// (0,0,0,20)
+    assertEquals(jonny.atributos().inteligencia,40)
+    assertEquals(jonny.inventario.cantidadItems, 0)
+  }
+
+  @Test
+  def palitoMagico_No_CumpleCondicion_Ladron(): Unit = {
+    val jonny = new Heroe(new Stats  (50,50,50,20))
+    jonny.adquirirTrabajo(Ladron)     //(-5,0,10,0)
+    jonny.equiparseItem(palitoMagico)// (0,0,0,20)
+    assertEquals(jonny.atributos().hp,45)
+    assertEquals(jonny.atributos().inteligencia,20)
+    assertEquals(jonny.atributos().velocidad,60)
+    assertEquals(jonny.inventario.cantidadItems, 0)
+  }
+
+
+  //Test para Armadura EleganteSport : total=2
+  @Test
+  def armaduraElefanteSport_Equiarse_Hereo(): Unit = {
+    val jonny = new Heroe(new Stats  (10,50,5,50))
+    jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
+    assertEquals(jonny.inventario.cantidadItems, 1)
+    assertEquals(jonny.atributos().velocidad,35)
+    assertEquals(jonny.atributos().hp,1)
+   }
+
+  @Test
+  def armaduraElefanteSport_Equiarse_Hereo_Ladron(): Unit = {
+    val jonny = new Heroe(new Stats  (50,50,5,50))
+    jonny.adquirirTrabajo(Ladron)    //(-5,0,10,0)
+    jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
+    assertEquals(jonny.inventario.cantidadItems, 1)
+    assertEquals(jonny.atributos().velocidad,45)
+    assertEquals(jonny.atributos().hp,15)
+  }
+
+
+  
+
+
+
   @Test //by jon: (Pregunta hecha a los ayudantes) falta verificar si lo que añade el talisman de dedicacion es al acumulado o el del trabajo
-  def asignarTrabajoItems2(): Unit = {
+  def jon_asignarTrabajoItems2(): Unit = {
     val lucas = new Heroe(new Stats(30,30,30,30))
     lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
     lucas.equiparseItem(arcoViejo) // (25,32,40,30)
@@ -104,7 +216,7 @@ class ItemsTest {
   }
 
   @Test //by jon: Hecho el test puedo agregar el item pero no puedo calcular sus atributos => habria que validar un "pisada" si omitirla o pisar al anterior
-  def asignarTrabajoItemsPisarItems(): Unit = {
+  def jon_asignarTrabajoItemsPisarItems(): Unit = {
     val lucas = new Heroe(new Stats(30,30,30,30))
     lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
     lucas.equiparseItem(arcoViejo) // (25,32,40,30)
@@ -114,7 +226,7 @@ class ItemsTest {
     assertEquals(lucas.inventario.cantidadItems, 3)
   }
   @Test //by jon: testeo que el efecto lo hace correctamente sobre el acumulado
-  def ProbandoespadaDeLaVida(): Unit = {
+  def jon_ProbandoespadaDeLaVida(): Unit = {
     val lucas = new Heroe(new Stats(30,30,30,30))
     lucas.adquirirTrabajo(Ladron) // (25,30,40,30) < --- -5,0,10,0
     lucas.equiparseItem(talismanDedicacion) // (26,31,41,31)
