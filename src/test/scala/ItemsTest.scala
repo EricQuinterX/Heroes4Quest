@@ -34,19 +34,17 @@ class ItemsTest {
   val condicion_talismanMinimalista = (h: Heroe) => true
   val efecto_talismanMinimalista    = (h: Heroe) => h.stats.subirHp(50 - 10 * (h.inventario.cantidadItems - 1))
 
-  val condicion_vinchaBufaloAgua = (h: Heroe) => h.trabajo.isEmpty // si no esta trabajando
-  val efecto_vinchaBufaloAgua    = (h: Heroe) =>
-      if (h.atributos().fuerza>h.atributos().inteligencia){
-        h.atributos().subirInteligencia(30)}  //??? lo hago asi para que no sea solamente al stat base
-      else {
-        h.atributos().subirATodosMenosInteligencia(10)  //??? lo hago asi para que no sea solamente al stat base
-      }
+  val condicion_vichaDelBufaloDeAgua = (h: Heroe) => h.trabajo.isEmpty
+  val efecto_vichaDelBufaloDeAgua    = (h: Heroe) =>{
+    val fuertaInt = h.stats.fuerza
+    val inteligenciaInt = h.stats.inteligencia
+    if (fuertaInt > inteligenciaInt)
+      h.stats.subirInteligencia(30)
+    else
+      h.stats.subirATodosMenosInteligencia(10)
+    }
 
-
-
- /* val condicion_vichaDelBufaloDeAgua = ???
-  val efecto_vichaDelBufaloDeAgua    = ???
-
+ /*
   val condicion_talismanMaldito = ???
   val efecto_talismanMaldito    = ???*/
 
@@ -66,7 +64,7 @@ class ItemsTest {
   val escudoAntiRobo = new Item("Escudo Anti-Robo", 500, Mano(1), efecto_escudoAntiRobo, condicion_escudoAntiRobo)
   val talismanDedicacion = new Item("Talisman de Dedicacion", 300, Cuello, efecto_talismanDedicacion, condicion_talismanDedicacion)
   val talismanMinimalista = new Item("Talisman Minimalista", 50, Cuello, efecto_talismanMinimalista, condicion_talismanMinimalista)
-  //val vinchaDelBufaloDeAgua = new Item("Vincha del Bufalo de Agua", 100, Cabeza, efecto_vichaDelBufaloDeAgua, condicion_vichaDelBufaloDeAgua)
+  val vinchaDelBufaloDeAgua = new Item("Vincha del Bufalo de Agua", 100, Cabeza, efecto_vichaDelBufaloDeAgua, condicion_vichaDelBufaloDeAgua)
   //val talismanMaldito = new Item("Talisman Maldito", 1000, Cuello, efecto_talismanMaldito, condicion_talismanMaldito)
   val espadaDeLaVida = new Item("Espada de la Vida",500,Mano(1),efecto_espadaDeLaVida,condicion_espadaDeLaVida)
 
@@ -155,8 +153,7 @@ class ItemsTest {
     assertEquals(jonny.atributos().hp,45)
     assertEquals(jonny.atributos().inteligencia,70)
     assertEquals(jonny.atributos().velocidad,60)
-    assertEquals(jonny.inventario.cantidadItems, 1)
-  }
+   }
 
   @Test
   def palitoMagico_No_CumpleCondicion(): Unit = {
@@ -164,7 +161,6 @@ class ItemsTest {
     jonny.adquirirTrabajo(Guerrero)   //(10,15,0,-10)
     jonny.equiparseItem(palitoMagico)// (0,0,0,20)
     assertEquals(jonny.atributos().inteligencia,40)
-    assertEquals(jonny.inventario.cantidadItems, 0)
   }
 
   @Test
@@ -184,7 +180,6 @@ class ItemsTest {
   def armaduraElefanteSport_Equiarse_Hereo(): Unit = {
     val jonny = new Heroe(new Stats  (10,50,5,50))
     jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
-    assertEquals(jonny.inventario.cantidadItems, 1)
     assertEquals(jonny.atributos().velocidad,35)
     assertEquals(jonny.atributos().hp,1)
    }
@@ -194,7 +189,6 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (50,50,5,50))
     jonny.adquirirTrabajo(Ladron)    //(-5,0,10,0)
     jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
-    assertEquals(jonny.inventario.cantidadItems, 1)
     assertEquals(jonny.atributos().velocidad,45)
     assertEquals(jonny.atributos().hp,15)
   }
@@ -234,6 +228,78 @@ class ItemsTest {
     assertEquals(jonny.atributos().hp,10)
   }
 
+
+  //Test para talismanDe_Dedicacion : total=3
+  @Test
+  def talismanDe_Dedicacion_Sin_Trabajo(): Unit = {
+    val jonny = new Heroe(new Stats  (10,10,10,10))
+    jonny.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
+    assertEquals(jonny.atributos().hp,10)
+  }
+
+
+  @Test
+  def talismanDe_Dedicacion_Con_Trabajo_Mago(): Unit = {
+    val jonny = new Heroe(new Stats  (10,10,10,10))
+    jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
+    jonny.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
+    assertEquals(jonny.atributos().hp,12)
+  }
+
+  @Test
+  def talismanDe_Dedicacion_Con_Trabajo_Mago_conPalito(): Unit = {
+    val jonny = new Heroe(new Stats  (10,10,10,10))
+    jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
+    jonny.equiparseItem(palitoMagico)// (0,0,0,20)
+    jonny.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
+    assertEquals(jonny.atributos().hp,12)
+    assertEquals(jonny.atributos().inteligencia,52)
+  }
+
+
+  //Test para talismanDel_Minimalismo: total=2
+  @Test
+  def talismanDel_Minimalismo_SinItems_Equipados(): Unit = {
+    val jonny = new Heroe(new Stats  (10,10,10,10))
+    jonny.equiparseItem(talismanMinimalista)// (+50-10*inventario.size,0,0,0)
+    assertEquals(jonny.atributos().hp,60)
+  }
+
+  @Test
+  def talismanDel_Minimalismo_Con_2_Items_Equipados(): Unit = {
+    val jonny = new Heroe(new Stats  (10,50,10,10))
+    jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
+    jonny.equiparseItem(cascoVikingo) // (+10,0,0,0)
+    jonny.equiparseItem(talismanMinimalista)// (+50-10*inventario.size,0,0,0)
+    assertEquals(jonny.atributos().hp,70)
+    assertEquals(jonny.inventario.cantidadItems, 3)
+  }
+
+
+  //Test para Vincha del bufalo de agua: total=2
+  @Test
+  def vinchaDel_Bufalo_de_Agua_CumpleCondicion_MayorInteligencia(): Unit = {
+    val jonny = new Heroe(new Stats  (10,10,10,10))
+    jonny.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
+    assertEquals(jonny.atributos().hp,20)
+    assertEquals(jonny.atributos().velocidad,20)
+    assertEquals(jonny.atributos().fuerza,20)
+  }
+
+  @Test
+  def vinchaDel_Bufalo_de_Agua_CumpleCondicion_MayorFuerza(): Unit = {
+    val jonny = new Heroe(new Stats  (10,20,10,10))
+    jonny.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
+    assertEquals(jonny.atributos().inteligencia,40)
+  }
+
+  @Test
+  def vinchaDel_Bufalo_de_Agua_No_CumpleCondicion(): Unit = {
+    val jonny = new Heroe(new Stats  (10,20,10,5))
+    jonny.adquirirTrabajo(Guerrero)
+    jonny.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
+    assertEquals(jonny.atributos().inteligencia,1)
+  }
 
 
 
