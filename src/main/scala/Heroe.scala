@@ -7,7 +7,7 @@ case object Pecho extends Posicion
 case object Cuello extends Posicion
 
 
-case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario()){
+case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario(), var equipo:Option[Equipo]=None){
 
   def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) => x == unTrabajo; case None => false}
 

@@ -26,7 +26,7 @@ case class Equipo (name: String, var heroes: List[Heroe]) {
     heroes.filter(h => h.nivelMejora(item) > 0 && item.validarCondicion(h)) match {
       case Nil => pozoDeOro += item.precio
       case x :: Nil => x.equiparseItem(item)
-      case hs => hs.maxBy(_.nivelMejora(item)).equiparseItem(item)
+      case hs => hs.maxBy(_.nivelMejora(item)).equiparseItem(item) //by jon: (Pregunta hecha a los ayudantes) Que pasa si hay dos heroes que presentan igual incremento?
     }
   }
 
