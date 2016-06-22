@@ -20,7 +20,8 @@ case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventa
     case None => atributos().atributoMaximo() // En caso que no tenga trabajo elijo el atributo maximo
   }
 
-  def equiparseItem(item: Item) = if (item.validarCondicion(this)) inventario.reemplazaritemM(item)
+  def equiparseItem(item: Item) = if (item.validarCondicion(this)) inventario.reemplazarItem(item)
+  def descartarItem(item: Item) = inventario.descartarItem(item)
 
   def nivelMejora(itemNuevo: Item) : Int = {
     val beneViejoItem: Int = atributoPrincipal()

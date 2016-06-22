@@ -35,22 +35,20 @@ class ItemsTest {
   val efecto_talismanMinimalista    = (h: Heroe) => h.stats.subirHp(50 - 10 * (h.inventario.cantidadItems - 1))
 
   val condicion_vichaDelBufaloDeAgua = (h: Heroe) => h.trabajo.isEmpty
-  val efecto_vichaDelBufaloDeAgua    = (h: Heroe) =>{
-    val fuertaInt = h.stats.fuerza
-    val inteligenciaInt = h.stats.inteligencia
-    if (fuertaInt > inteligenciaInt)
+  val efecto_vichaDelBufaloDeAgua    = (h: Heroe) => {
+    if (h.stats.fuerza > h.stats.inteligencia)
       h.stats.subirInteligencia(30)
     else
-      h.stats.subirATodosMenosInteligencia(10)
-    }
+      h.stats.subirHp(10).subirFuerza(10).subirVelocidad(10)
+  }
 
 
   val condicion_talismanMaldito = (h: Heroe) => true
-  val efecto_talismanMaldito    = (h: Heroe) => h.stats.todos_a_Uno()
+  val efecto_talismanMaldito    = (h: Heroe) => h.stats.setearATodos(1)
 
 
   val condicion_espadaDeLaVida = (h:Heroe) => true
-  val efecto_espadaDeLaVida = (h:Heroe) => h.stats.fuerzaIgualarA(h.stats.hp)
+  val efecto_espadaDeLaVida = (h:Heroe) => h.stats.setearFuerza(h.stats.hp)
 
 
 
@@ -280,7 +278,7 @@ class ItemsTest {
   //Test para Vincha del bufalo de agua: total=3
   @Test
   def vinchaDel_Bufalo_de_Agua_CumpleCondicion_MayorInteligencia(): Unit = {
-    val jonny = new Heroe(new Stats  (10,10,10,10))
+    val jonny = new Heroe(new Stats (10,10,10,10))
     jonny.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
     assertEquals(jonny.atributos().hp,20)
     assertEquals(jonny.atributos().velocidad,20)
