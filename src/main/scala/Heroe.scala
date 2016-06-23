@@ -1,13 +1,15 @@
 
 //Posiciones de un heroe
-abstract class Posicion(val cantidad: Int = 1)
+abstract class Posicion
 case object Cabeza extends Posicion
-case class Mano(override val cantidad: Int) extends Posicion
+case class Mano(cantidad: Int) extends Posicion
 case object Pecho extends Posicion
 case object Cuello extends Posicion
 
 
-case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario(), var equipo:Option[Equipo]=None){
+case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario()){
+
+  var equipo: Option[Equipo] = None
 
   def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) => x == unTrabajo; case None => false}
 
@@ -32,5 +34,9 @@ case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventa
   def dejarTrabajo() = trabajo = None
 
   def adquirirTrabajo(unTrabajo: Trabajo) = trabajo = Some(unTrabajo)
+
+  def unirseAEquipo(e: Equipo) = equipo = Some(e)
+
+  def dejarEquipo() = equipo = None
 }
 
