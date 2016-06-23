@@ -319,7 +319,7 @@ class ItemsTest {
     jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
     jonny.equiparseItem(talismanMaldito)// (1,1,1,1)
     assertEquals(jonny.atributos().hp,1)
-    //assertEquals(jonny.atributos().velocidad,1)
+    assertEquals(jonny.atributos().velocidad,1)
     assertEquals(jonny.atributos().fuerza,1)
     assertEquals(jonny.atributos().inteligencia,1)
   }
@@ -332,7 +332,7 @@ class ItemsTest {
     jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
     assertEquals(jonny.atributos().hp,1)
     assertEquals(jonny.atributos().fuerza,1)
-    //assertEquals(jonny.atributos().velocidad,1) //todo rompe aqui
+    assertEquals(jonny.atributos().velocidad,1)
     assertEquals(jonny.atributos().inteligencia,1)
   }
 

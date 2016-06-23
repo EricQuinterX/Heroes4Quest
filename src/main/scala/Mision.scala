@@ -4,6 +4,8 @@ case class Derrotada(e: Equipo) extends ResultadoTarea
 
 class Mision (tareas: List[Tarea], botin: (Equipo => Unit)){
 
+  type unHeroe = (String, Int)
+
 
 
 }
