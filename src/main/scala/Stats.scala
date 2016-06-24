@@ -17,6 +17,7 @@ case class Stats (hp: Int, fuerza: Int, velocidad: Int, inteligencia: Int){
   def setearFuerza(i: Int): Stats = copy(fuerza = i)
   def setearInteligencia(i: Int): Stats = copy(inteligencia = i)
   def setearVelocidad(i: Int): Stats = copy(velocidad = i)
+  def bajarHp(i: Int): Stats = copy(hp= hp - i)
 
   def verificarNoNegativos(): Stats= {
     if (hp < 1) copy(hp = 1).verificarNoNegativos()

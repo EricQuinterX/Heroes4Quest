@@ -20,7 +20,12 @@ case class Equipo (name: String, var heroes: List[Heroe],var pozoDeOro: Int = 0)
         Some(lider1)
   }
 
-  def mejorHeroeSegun(f: Heroe => Int) = heroes.maxBy(f(_))
+//  def mejorHeroeSegun(f: Heroe => Int) = heroes.maxBy(f(_))
+  def mejorHeroeSegun(f: Heroe => Int): Heroe = {
+    if (heroes.isEmpty) throw new IllegalArgumentException("No tiene miembros")
+    heroes.maxBy(f(_))
+}
+
 
   def obtieneItem(item: Item): Unit = {
     if (heroes.isEmpty) return
