@@ -9,12 +9,12 @@ class Tarea (fxFacilidad: (Heroe => Int), efecto: (Heroe => Heroe), equipo: Equi
   //atencion! : Cuando se crea el equipo, se le tiene que avisar a todos los heroes a que equipo pertenecen. Tambien quiero validar esto.
   //Por mi parte, elegiria la opcion 2 que les comente en el houngouts queda menos sucio.
   //No se como sacar el siguiente metodo afuera de la clase, sin tener que ponerlo como val en el Test!!!
-  def realizarTarea() = {
+  /*def realizarTarea() = {
     equipo.heroes.maxBy(fxFacilidad(_) match {
     Nil =>
     }
 
-  }
+  }*/
 
 }
 

@@ -4,9 +4,10 @@ Consideraciones:
   - No se debera meter luego de haber creado al equipo, a excepcion que se unan heroes
    despues de realizar misiones como recompensa.
  */
-case class Equipo (name: String, var heroes: List[Heroe]) {
+case class Equipo (name: String, var heroes: List[Heroe],var pozoDeOro: Int = 0) {
 
-  var pozoDeOro: Int = 0
+
+
   def lider(): Option[Heroe] = heroes match {
     case Nil => None
     case p1 :: Nil => Some(p1)
