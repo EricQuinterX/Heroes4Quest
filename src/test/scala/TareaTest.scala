@@ -102,7 +102,7 @@ class TareaTest {
     assertEquals(losDragones.lider().get,jonny)
     assertEquals(efecto_pelear_contra_monstruo(jonny).stats.hp,1) //efecto ok
 
-    assertEquals(pelearContraMonstruo.puedeRealizarTarea(losDragones),TareaSuperada(losDragones)) //Tarea ----> esto devuelve una tarea no un numero
+    assertEquals(pelearContraMonstruo.puedeRealizarTarea(losDragones),TareaPuedeRealizarse(losDragones, jonny)) //Tarea ----> esto devuelve una tarea no un numero
   }
 
 }

@@ -1,6 +1,6 @@
 trait ResultadoTarea
-case class TareaSuperada(e: Equipo) extends ResultadoTarea
-case class TareaFallida(e: Equipo, t: Tarea) extends ResultadoTarea
+case class TareaPuedeRealizarse(equipo: Equipo, heroe: Heroe) extends ResultadoTarea
+case class TareaNosePuedeRealizar(e: Equipo, t: Tarea) extends ResultadoTarea
 
 
 class Tarea (name: String,
@@ -9,13 +9,17 @@ class Tarea (name: String,
              efecto: (Heroe => Heroe)){
 
   def puedeRealizarTarea(unEquipo: Equipo): ResultadoTarea = {
-    if (!condicion(unEquipo)) TareaFallida(unEquipo, this)
+    if (!condicion(unEquipo)) TareaNosePuedeRealizar(unEquipo, this)
 
     unEquipo.mejorHeroeSegun(fxFacilidad) match {
-      case None => TareaFallida(unEquipo, this)
-      case  Some(mejorHeroe) => efecto(mejorHeroe)
-                                TareaSuperada(unEquipo)
+      case None => TareaNosePuedeRealizar(unEquipo, this)
+      case Some(mejorHeroe) => TareaPuedeRealizarse(unEquipo, mejorHeroe)
     }
+  }
+
+  def aplicarEfecto(mejorHeroe: Heroe, unEquipo: Equipo): Equipo = {
+      val nuevoHeroe = efecto(mejorHeroe)
+      unEquipo.reemplazarMiembro(nuevoHeroe, mejorHeroe)
   }
 }
 
