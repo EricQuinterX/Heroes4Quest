@@ -19,14 +19,10 @@ class TareaTest {
       case _ => 12
     }
 
-  val efecto_pelear_contra_monstruo = (h :Heroe) =>
-    if (h.stats.fuerza<20) {
-      new Heroe(h.stats.setearHp(h.stats.hp - 1),h.trabajo,h.inventario)
-      //By jon: Le puse que se reduce 1 por poner un valor cualquiera para probar solamente
-    }else{h}
+  val efecto_pelear_contra_monstruo = (h :Heroe) => if (h.stats.fuerza<20) h.copy(stats = h.stats.setearHp(1)) else h
 
   val efecto_Forzar_Puerta = (unHeroe :Heroe) =>
-    if (unHeroe.trabajaDe(Mago) || unHeroe.trabajaDe(Ladron)) unHeroe else unHeroe.copy(stats = unHeroe.stats.subirFuerza(1).bajarHp(5))
+    if (!unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)) unHeroe.copy(stats = unHeroe.stats.subirFuerza(1).subirHp(-5)) else unHeroe
 
   val facilidad_Forzar_Puerta = (unHeroe :Heroe) =>
   unHeroe.equipo match {
@@ -98,19 +94,14 @@ class TareaTest {
     jonas.unirseAEquipo(losDragones)
     matias.unirseAEquipo(losDragones)
 
-    val pelearContraMonstruo = new Tarea(facilidad_pelear_contra_monstruo,efecto_pelear_contra_monstruo,losDragones)
+    val condicion_pelearContraMonstruo = (e: Equipo) => true
+    val pelearContraMonstruo = new Tarea("Pelea Contra Monstruo",condicion_pelearContraMonstruo, facilidad_pelear_contra_monstruo,efecto_pelear_contra_monstruo)
 
     //facilidad ok
     assertEquals(facilidad_pelear_contra_monstruo(jonas),20)
     assertEquals(losDragones.lider().get,jonny)
-
-    //efecto ok
-    assertEquals(efecto_pelear_contra_monstruo(jonny).stats.hp,9)
-
-    //Tarea
-    assertEquals(pelearContraMonstruo,9)
-
-
+    assertEquals(efecto_pelear_contra_monstruo(jonny).stats.hp,1) //efecto ok
+//    assertEquals(pelearContraMonstruo,9) //Tarea ----> esto devuelve una tarea no un numero
   }
 
 }

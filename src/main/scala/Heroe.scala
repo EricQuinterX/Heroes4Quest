@@ -8,10 +8,9 @@ case object Cuello extends Posicion
 
 
 case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario()){
-
   var equipo: Option[Equipo] = None
 
-  def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) => x == unTrabajo; case None => false}
+  def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) if x == unTrabajo => true ; case _ => false}
 
   def atributos() : Stats = inventario.sumarTodosAtributos(this)
 
@@ -22,12 +21,12 @@ case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventa
     case None => atributos().atributoMaximo() // En caso que no tenga trabajo elijo el atributo maximo
   }
 
-  def equiparseItem(item: Item) = if (item.validarCondicion(this)) inventario.reemplazarItem(item)
-  def descartarItem(item: Item) = inventario.descartarItem(item)
+  def equiparseItem(item: Item) = if (item.validarCondicion(this)) inventario = inventario.meter(item)
+  def descartarItem(item: Item) = inventario = inventario.sacar(item)
 
   def nivelMejora(itemNuevo: Item) : Int = {
     val beneViejoItem: Int = atributoPrincipal()
-    val beneNuevoitem: Int = copy(inventario = inventario.reemplazaritemIM(itemNuevo)).atributoPrincipal()
+    val beneNuevoitem: Int = copy(inventario = inventario.meter(itemNuevo)).atributoPrincipal()
     beneNuevoitem - beneViejoItem
   }
 
@@ -38,5 +37,6 @@ case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventa
   def unirseAEquipo(e: Equipo) = equipo = Some(e)
 
   def dejarEquipo() = equipo = None
+
 }
 

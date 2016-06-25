@@ -304,7 +304,7 @@ class ItemsTest {
   //Test para el talisman maldito: total=3
   @Test
   def talisman_Maldito(): Unit = {
-    val jonny = new Heroe(new Stats  (10,10,10,10))
+    val jonny = new Heroe(new Stats(10,10,10,10))
     jonny.equiparseItem(talismanMaldito)// (1,1,1,1)
     assertEquals(jonny.atributos().hp,1)
     assertEquals(jonny.atributos().velocidad,1)
@@ -316,8 +316,8 @@ class ItemsTest {
   def talisman_Maldito_Mago(): Unit = {
     val jonny = new Heroe(new Stats  (10,10,10,10))
     jonny.adquirirTrabajo(Mago)      //(0,-20,0,20)
-    jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
     jonny.equiparseItem(talismanMaldito)// (1,1,1,1)
+    jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
     assertEquals(jonny.atributos().hp,1)
     assertEquals(jonny.atributos().velocidad,1)
     assertEquals(jonny.atributos().fuerza,1)

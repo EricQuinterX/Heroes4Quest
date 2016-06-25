@@ -1,11 +1,17 @@
-trait ResultadoTarea
-case class Superada(e: Equipo) extends ResultadoTarea
-case class Derrotada(e: Equipo) extends ResultadoTarea
 
-class Mision (tareas: List[Tarea], botin: (Equipo => Unit)){
+trait ResultadoMision
+case class MisionSuperada(e: Equipo) extends ResultadoMision
+case class MisionFallida (e: Equipo, t: Tarea) extends ResultadoMision
 
-  type unHeroe = (String, Int)
+class Mision (tareas: List[Tarea], recompensa: (Equipo => Unit)){
 
-
-
+  def ejecutar(e: Equipo, ts: List[Tarea] = tareas): ResultadoMision = ts match {
+    case Nil =>
+      recompensa(e)
+      MisionSuperada(e)
+    case t :: resto => t.ejecutar(e) match {
+      case TareaSuperada(e1) => ejecutar(e1, resto)
+      case TareaFallida(_,tarea) => MisionFallida(e, tarea)
+    }
+  }
 }
