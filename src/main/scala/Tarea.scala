@@ -8,11 +8,11 @@ class Tarea (name: String,
              fxFacilidad: (Heroe => Int),
              efecto: (Heroe => Heroe)){
 
-  def realizarTarea(unEquipo: Equipo): ResultadoTarea = {
-
+  def puedeRealizarTarea(unEquipo: Equipo): ResultadoTarea = {
     if (!condicion(unEquipo)) TareaFallida(unEquipo, this)
+
     unEquipo.mejorHeroeSegun(fxFacilidad) match {
-      case None => ???
+      case None => TareaFallida(unEquipo, this)
       case  Some(mejorHeroe) => efecto(mejorHeroe)
                                 TareaSuperada(unEquipo)
     }

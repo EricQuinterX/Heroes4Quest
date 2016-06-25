@@ -9,7 +9,7 @@ class Mision (tareas: List[Tarea], recompensa: (Equipo => Unit)){
     case Nil =>
       recompensa(e)
       MisionSuperada(e)
-    case t :: resto => t.realizarTarea(e) match {
+    case t :: resto => t.puedeRealizarTarea(e) match {
       case TareaSuperada(e1) => ejecutar(e1, resto)
       case TareaFallida(_,tarea) => MisionFallida(e, tarea)
     }
