@@ -8,7 +8,7 @@ case class Item(name: String, precio: Int, parte: Posicion, efecto: (Heroe => St
 
 
 //  Inventario
-case class Inventario(var items: List[Item] = Nil){
+case class Inventario(items: List[Item] = Nil){
 
   def cantidadItems = items.size
 

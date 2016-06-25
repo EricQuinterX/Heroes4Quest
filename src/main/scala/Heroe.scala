@@ -7,7 +7,7 @@ case object Pecho extends Posicion
 case object Cuello extends Posicion
 
 
-case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventario: Inventario = new Inventario()){
+case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inventario = new Inventario){
   var equipo: Option[Equipo] = None
 
   def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) if x == unTrabajo => true ; case _ => false}
@@ -21,8 +21,8 @@ case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventa
     case None => atributos().atributoMaximo() // En caso que no tenga trabajo elijo el atributo maximo
   }
 
-  def equiparseItem(item: Item) = if (item.validarCondicion(this)) inventario = inventario.meter(item)
-  def descartarItem(item: Item) = inventario = inventario.sacar(item)
+  def equiparseItem(item: Item) : Heroe = if (item.validarCondicion(this)) copy(inventario = inventario.meter(item)) else this
+  def descartarItem(item: Item) = copy(inventario = inventario.sacar(item))
 
   def nivelMejora(itemNuevo: Item) : Int = {
     val beneViejoItem: Int = atributoPrincipal()
@@ -30,9 +30,9 @@ case class Heroe (stats: Stats, var trabajo: Option[Trabajo] = None, var inventa
     beneNuevoitem - beneViejoItem
   }
 
-  def dejarTrabajo() = trabajo = None
+  def dejarTrabajo() = copy(trabajo = None)
 
-  def adquirirTrabajo(unTrabajo: Trabajo) = trabajo = Some(unTrabajo)
+  def adquirirTrabajo(unTrabajo: Trabajo) = copy(trabajo = Some(unTrabajo))
 
   def unirseAEquipo(e: Equipo) = equipo = Some(e)
 

@@ -22,12 +22,17 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int) {
 */
 
   def obtieneItem(item: Item): Unit = {
-    if (heroes.isEmpty) return
-    heroes.filter(h => h.nivelMejora(item) > 0 && item.validarCondicion(h)) match {
-      case Nil => pozoDeOro + item.precio
-      case x :: Nil => x.equiparseItem(item)
-      case hs => hs.maxBy(_.nivelMejora(item)).equiparseItem(item) //by jon: (Pregunta hecha a los ayudantes) Que pasa si hay dos heroes que presentan igual incremento?
-    }
+
+
+    val superman = heroes.foldLeft( heroes.head){(resultado,heroe) => if (resultado.nivelMejora(item) > heroe.nivelMejora(item)) resultado else heroe}
+    superman.equiparseItem(item)
+    this.reemplazarMiembro(heroes.head,superman)
+    //    if (heroes.isEmpty) return
+//    heroes.filter(h => h.nivelMejora(item) > 0 && item.validarCondicion(h)) match {
+//      case Nil => pozoDeOro + item.precio
+//      case x :: Nil => x.equiparseItem(item)
+//      case hs => hs.maxBy(_.nivelMejora(item)).equiparseItem(item) //by jon: (Pregunta hecha a los ayudantes) Que pasa si hay dos heroes que presentan igual incremento?
+//    }
   }
 
   def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
