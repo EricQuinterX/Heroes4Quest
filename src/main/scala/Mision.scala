@@ -5,13 +5,28 @@ case class MisionFallida (e: Equipo, t: Tarea) extends ResultadoMision
 
 class Mision (tareas: List[Tarea], recompensa: (Equipo => Unit)){
 
-  def ejecutar(e: Equipo, ts: List[Tarea] = tareas): ResultadoMision = ts match {
+  def ejecutarMision(unEquipo: Equipo, tareas: List[Tarea] = tareas): ResultadoMision = tareas match {
     case Nil =>
-      recompensa(e)
-      MisionSuperada(e)
-    case tarea :: restoTareas => tarea.puedeRealizarTarea(e) match {
-      case TareaPuedeRealizarse(equipo, heroe) => ejecutar(tarea.aplicarEfecto(heroe, equipo), restoTareas)
-      case TareaNosePuedeRealizar(_,tarea) => MisionFallida(e, tarea)
+      recompensa(unEquipo)
+      MisionSuperada(unEquipo)
+    case tarea :: restoTareas => tarea.puedeRealizarTarea(unEquipo) match {
+      case TareaPuedeRealizarse(equipo, heroe) => ejecutarMision(tarea.aplicarEfecto(heroe, equipo), restoTareas)
+      case TareaNosePuedeRealizar(_,tarea) => MisionFallida(unEquipo, tarea)
     }
   }
+
+  def ejecutarMision2(equipoInicial: Equipo): ResultadoMision = {
+      val equipoFinal = tareas.foldLeft(equipoInicial) {(equipo,unaTarea) => this.realizarTarea(equipo, unaTarea)}
+      MisionSuperada(equipoFinal)
+  }
+
+  def realizarTarea(unEquipo: Equipo, unaTarea: Tarea): Equipo = {
+    unaTarea.puedeRealizarTarea(unEquipo) match{
+      case TareaPuedeRealizarse(equipo, heroe) => unaTarea.aplicarEfecto(heroe, equipo)
+//      case TareaNosePuedeRealizar(_,tarea) => MisionFallida(unEquipo, tarea)
+
+    }
+  }
+
+
 }

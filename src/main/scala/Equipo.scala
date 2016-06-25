@@ -46,7 +46,7 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int) {
 
 
 //  Punto 3
-  def hacerMision(m: Mision): ResultadoMision = m.ejecutar(this)
+  def hacerMision(m: Mision): ResultadoMision = m.ejecutarMision(this)
 
 //  Punto 4
   def elegirMejorMision(tablon: List[Mision], criterio: ((Equipo,Equipo)=>Boolean)): Mision = tablon match {
