@@ -32,7 +32,7 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int) {
 
   def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
 
-  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = copy(heroes = nuevoHeroe :: heroes.filter(_ != viejoHeroe))
+  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = this.copy(heroes= nuevoHeroe :: heroes.filter(_ != viejoHeroe))//(heroes = nuevoHeroe :: heroes.filter(_ != viejoHeroe))
 
   def lider(): Option[Heroe] = heroes match {
     case Nil => None
