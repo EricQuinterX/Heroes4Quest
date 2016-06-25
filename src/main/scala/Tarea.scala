@@ -6,15 +6,16 @@ case class TareaFallida(e: Equipo, t: Tarea) extends ResultadoTarea
 class Tarea (name: String,
              condicion: (Equipo => Boolean),
              fxFacilidad: (Heroe => Int),
-             efecto: (Heroe => Heroe)){ // recompensa???
+             efecto: (Heroe => Heroe)){
 
-  def ejecutar(e: Equipo): ResultadoTarea = {
-    if (!condicion(e)) return TareaFallida(e, this)
-    val mejorHeroe = e.mejorHeroeSegun(fxFacilidad)
-    mejorHeroe.stats.verificarNoNegativos()
-    efecto(mejorHeroe)
-//    recompensa(mejorHeroe)
-    TareaSuperada(e)
+  def realizarTarea(unEquipo: Equipo): ResultadoTarea = {
+
+    if (!condicion(unEquipo)) TareaFallida(unEquipo, this)
+    unEquipo.mejorHeroeSegun(fxFacilidad) match {
+      case None => ???
+      case  Some(mejorHeroe) => efecto(mejorHeroe)
+                                TareaSuperada(unEquipo)
+    }
   }
 
 

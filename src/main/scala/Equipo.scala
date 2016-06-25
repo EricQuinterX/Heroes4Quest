@@ -11,10 +11,15 @@ case class EntrenamientoSuperado(e: Equipo) extends ResultadoEntrenamiento
 case class Equipo (name: String, var heroes: List[Heroe],var pozoDeOro: Int = 0) {
 
 //  Punto 2
+  def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = heroes match {
+    case Nil => None
+    case heroes => Some(heroes.maxBy(f(_)))
+  }
+/*
   def mejorHeroeSegun(f: Heroe => Int): Heroe = {
     if (heroes.isEmpty) throw EquipoVacioException
     heroes.maxBy(f(_))
-  }
+*/
 
   def obtieneItem(item: Item): Unit = {
     if (heroes.isEmpty) return
