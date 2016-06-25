@@ -8,7 +8,7 @@ case class EntrenamientoSuperado(e: Equipo) extends ResultadoEntrenamiento
 
 
 
-case class Equipo (name: String, var heroes: List[Heroe],var pozoDeOro: Int = 0) {
+case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int) {
 
 //  Punto 2
   def mejorHeroeSegun(f: Heroe => Int): Heroe = {
@@ -19,7 +19,7 @@ case class Equipo (name: String, var heroes: List[Heroe],var pozoDeOro: Int = 0)
   def obtieneItem(item: Item): Unit = {
     if (heroes.isEmpty) return
     heroes.filter(h => h.nivelMejora(item) > 0 && item.validarCondicion(h)) match {
-      case Nil => pozoDeOro += item.precio
+      case Nil => pozoDeOro + item.precio
       case x :: Nil => x.equiparseItem(item)
       case hs => hs.maxBy(_.nivelMejora(item)).equiparseItem(item) //by jon: (Pregunta hecha a los ayudantes) Que pasa si hay dos heroes que presentan igual incremento?
     }
@@ -27,7 +27,7 @@ case class Equipo (name: String, var heroes: List[Heroe],var pozoDeOro: Int = 0)
 
   def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
 
-  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = heroes = nuevoHeroe :: heroes.filter(_ != viejoHeroe)
+  def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = copy(heroes = nuevoHeroe :: heroes.filter(_ != viejoHeroe))
 
   def lider(): Option[Heroe] = heroes match {
     case Nil => None
