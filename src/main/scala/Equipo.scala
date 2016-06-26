@@ -21,8 +21,7 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int) {
     heroes.maxBy(f(_))
 */
 
-  def obtieneItem(item: Item): Unit = {
-
+  def obtieneItem(item: Item): Equipo = {
 
     val superman = heroes.foldLeft( heroes.head){(resultado,heroe) => if (resultado.nivelMejora(item) > heroe.nivelMejora(item)) resultado else heroe}
     superman.equiparseItem(item)
@@ -48,6 +47,10 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int) {
       if (lider1.atributoPrincipal()==lider2.atributoPrincipal()) None
       else Some(lider1)
   }
+
+
+
+
 
 
 //  Punto 3
