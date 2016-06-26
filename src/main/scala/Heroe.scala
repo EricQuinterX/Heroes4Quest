@@ -7,8 +7,8 @@ case object Pecho extends Posicion
 case object Cuello extends Posicion
 
 
-case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inventario = new Inventario){
-  var equipo: Option[Equipo] = None
+case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inventario = new Inventario, equipo: Option[Equipo] = None){
+
 
   def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) if x == unTrabajo => true ; case _ => false}
 
@@ -27,6 +27,7 @@ case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inv
   def nivelMejora(itemNuevo: Item) : Int = {
     val beneViejoItem: Int = atributoPrincipal()
     val beneNuevoitem: Int = copy(inventario = inventario.meter(itemNuevo)).atributoPrincipal()
+
     beneNuevoitem - beneViejoItem
   }
 
@@ -34,9 +35,9 @@ case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inv
 
   def adquirirTrabajo(unTrabajo: Trabajo) = copy(trabajo = Some(unTrabajo))
 
-  def unirseAEquipo(e: Equipo) = equipo = Some(e)
+  def unirseAEquipo(e: Equipo) = copy(equipo = Some(e))
 
-  def dejarEquipo() = equipo = None
+  def dejarEquipo() = copy(equipo = None)
 
 }
 
