@@ -1,6 +1,12 @@
 
 class Trabajo(hp: Int, fuerza: Int, velocidad: Int, inteligencia: Int, principal: StatPrincipal) {
-  def sumarAtributos(e : Stats) : Stats = e.copy(hp = e.hp + hp, fuerza = e.fuerza + fuerza, velocidad = e.velocidad + velocidad, inteligencia = e.inteligencia + inteligencia)
+
+  def sumarAtributos(e : Stats) : Stats =
+    e.setear(e.copy(hp = e.hp + hp,
+      fuerza = e.fuerza + fuerza,
+      velocidad = e.velocidad + velocidad,
+      inteligencia = e.inteligencia + inteligencia))
+
   def valorAtributoPrincipal(): Int = {
     principal match {
       case Fuerza => fuerza

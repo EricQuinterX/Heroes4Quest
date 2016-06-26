@@ -10,7 +10,10 @@ class EquipoTest {
 
   //para los items
   val condicion_cascoVikingo = (h: Heroe) => h.stats.fuerza > 30
-  val efecto_cascoVikingo    = (h: Heroe) => h.stats.subirHp(10)
+  val efecto_cascoVikingo    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp+10))
+  }
 
   @Before
   def initialize() = {
@@ -104,8 +107,7 @@ class EquipoTest {
     val cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
 
     val losSinTrabajo3 = losSinTrabajo2.obtieneItem(cascoVikingo)
-    assertEquals(losSinTrabajo3.obtenerLider().lider.get.stats.hp, 50)
-
+    assertEquals(losSinTrabajo3.obtenerLider().lider.get.stats.hp, 40)
   }
 
   @Test

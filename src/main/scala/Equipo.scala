@@ -13,33 +13,30 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
 //  Punto 2
   def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = heroes match {
     case Nil => None
-    case heroes => Some(heroes.maxBy(f(_)))
+    case _ => Some(heroes.maxBy(f(_)))
   }
 
   def obtieneItem(item: Item): Equipo = {
-
     if (sirve_Para_Un_Heroe(item: Item)){
-      val unHeroe = heroes.foldLeft(heroes.head){(resultado,heroe) => if (resultado.nivelMejora(item) > heroe.nivelMejora(item)) resultado else heroe}
+      val unHeroe = heroes.foldLeft(heroes.head){(h1,h2) =>
+        if (h1.nivelMejora(item) > h2.nivelMejora(item)) h1 else h2}
       val unHeroePlus = unHeroe.equiparseItem(item)
-
       reemplazarMiembro(unHeroe,unHeroe)
     }else vender(item)
   }
 
-  def sirve_Para_Un_Heroe(item: Item): Boolean ={
-    val heroeCumpleCondicion= heroes.filter((h : Heroe)=> item.condicion(h))
+  def sirve_Para_Un_Heroe(item: Item): Boolean = {
+    val heroeCumpleCondicion= heroes.filter(item.condicion(_))
     heroes.nonEmpty && heroeCumpleCondicion.nonEmpty
   }
 
-  def vender(item: Item)={copy(pozoDeOro= pozoDeOro+item.precio)}
-
+  def vender(item: Item)= copy(pozoDeOro= pozoDeOro+item.precio)
 
   def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
 
   def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = copy(heroes= nuevoHeroe :: heroes.filter(_ != viejoHeroe))
 
   def obtenerLider(): Equipo =  {
-
     if (heroes.isEmpty){
       copy(lider = None)
     }else{

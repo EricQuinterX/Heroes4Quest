@@ -5,19 +5,34 @@ class ItemsTest {
 
   //  Condiciones y Efectos de los Items
   val condicion_cascoVikingo = (h: Heroe) => h.stats.fuerza > 30
-  val efecto_cascoVikingo    = (h: Heroe) => h.stats.subirHp(10)
+  val efecto_cascoVikingo    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp+10))
+  }
 
   val condicion_palitoMagico = (h: Heroe) => h.trabajaDe(Mago) || (h.trabajaDe(Ladron) && h.stats.inteligencia > 30)
-  val efecto_palitoMagico    = (h: Heroe) => h.stats.subirInteligencia(20)
+  val efecto_palitoMagico    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(inteligencia = s.inteligencia+20))
+  }
 
   val condicion_armaduraEleganteSport = (h: Heroe) => true
-  val efecto_armaduraEleganteSport    = (h: Heroe) => h.stats.subirHp(-30).subirVelocidad(30)
+  val efecto_armaduraEleganteSport    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp-30, velocidad = s.velocidad+30))
+  }
 
   val condicion_arcoViejo = (h: Heroe) => true
-  val efecto_arcoViejo    = (h: Heroe) => h.stats.subirFuerza(2)
+  val efecto_arcoViejo    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(fuerza = s.fuerza+2))
+  }
 
   val condicion_escudoAntiRobo = (h: Heroe) => !(h.trabajaDe(Ladron) || h.stats.fuerza < 20)
-  val efecto_escudoAntiRobo    = (h: Heroe) => h.stats.subirHp(20)
+  val efecto_escudoAntiRobo    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp+20))
+  }
 
   val condicion_talismanDedicacion = (h: Heroe) => true
   val efecto_talismanDedicacion    = (h: Heroe) => {
@@ -28,27 +43,33 @@ class ItemsTest {
       }
     }
     val redondeo = math.ceil(subida).toInt
-    h.stats.subirATodos(redondeo)
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp+redondeo, fuerza = s.fuerza+redondeo, velocidad = s.velocidad+redondeo, inteligencia = s.inteligencia+redondeo))
   }
 
   val condicion_talismanMinimalista = (h: Heroe) => true
-  val efecto_talismanMinimalista    = (h: Heroe) => h.stats.subirHp(50 - 10 * (h.inventario.cantidadItems - 1))
+  val efecto_talismanMinimalista    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp+50-10*(h.inventario.cantidadItems - 1)))
+  }
 
   val condicion_vichaDelBufaloDeAgua = (h: Heroe) => h.trabajo.isEmpty
   val efecto_vichaDelBufaloDeAgua    = (h: Heroe) => {
-    if (h.stats.fuerza > h.stats.inteligencia)
-      h.stats.subirInteligencia(30)
-    else
-      h.stats.subirHp(10).subirFuerza(10).subirVelocidad(10)
+    val s = h.stats
+    if (s.fuerza > s.inteligencia) s.setear(s.copy(inteligencia = s.inteligencia+30))
+    else s.setear(s.copy(hp = s.hp+10, fuerza = s.fuerza+10, velocidad = s.velocidad+10))
   }
 
 
   val condicion_talismanMaldito = (h: Heroe) => true
-  val efecto_talismanMaldito    = (h: Heroe) => h.stats.setearATodos(1)
+  val efecto_talismanMaldito    = (h: Heroe) => h.stats.setear(new Stats) // por default se instancia seteando a 1 los attr
 
 
   val condicion_espadaDeLaVida = (h:Heroe) => true
-  val efecto_espadaDeLaVida = (h:Heroe) => h.stats.setearFuerza(h.stats.hp)
+  val efecto_espadaDeLaVida = (h:Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(fuerza = s.hp))
+  }
 
 
 

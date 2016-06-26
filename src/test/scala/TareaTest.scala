@@ -10,6 +10,7 @@
 //  val facilidad_pelear_contra_monstruo = (h :Heroe) =>
 //    h.equipo match {
 //      case Some(equipo) => equipo.lider() match {
+//        case Some(lider)
 //        case Some(lider) => lider.trabajo match {
 //          case Some(Guerrero) => 20
 //          case _ => 10
