@@ -1,6 +1,6 @@
 //  Para corregir
-class Taberna (tablon: List[Mision]) {
-
+//class Taberna (tablon: List[Mision]) {
+//
 //  def elegirMejorMision(tablon: List[Mision], criterio: ((Equipo,Equipo)=>Boolean)): Mision = tablon match {
 //    case Nil => throw NoHacerNingunaMisionException
 //    case x :: resto => resto.foldLeft(x)((m1,m2) => {
@@ -33,5 +33,5 @@ class Taberna (tablon: List[Mision]) {
 //    if (i) new EntrenamientoSuperado(equipo)
 //    else new EntrenamientoFallido(ta.get)
 //  }
-
-}
+//
+//}

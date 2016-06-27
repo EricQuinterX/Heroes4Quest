@@ -3,10 +3,7 @@ case class TareaPuedeRealizarse(equipo: Equipo, heroe: Heroe) extends ResultadoT
 case class TareaNosePuedeRealizar(e: Equipo, t: Tarea) extends ResultadoTarea
 
 
-class Tarea (name: String,
-             condicion: (Equipo => Boolean),
-             fxFacilidad: (Heroe => Int),
-             efecto: (Heroe => Heroe)){
+class Tarea (name: String, condicion: (Equipo => Boolean), fxFacilidad: (Heroe => Int), efecto: (Heroe => Heroe)){
 
   def puedeRealizarTarea(unEquipo: Equipo): ResultadoTarea = {
     if (!condicion(unEquipo)) TareaNosePuedeRealizar(unEquipo, this)
@@ -20,7 +17,15 @@ class Tarea (name: String,
     val nuevoHeroe = efecto(mejorHeroe)
     unEquipo.reemplazarMiembro(nuevoHeroe, mejorHeroe)
   }
+
+
+
 }
+
+
+
+
+
 
 
 

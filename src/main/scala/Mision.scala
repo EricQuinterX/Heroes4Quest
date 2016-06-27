@@ -29,10 +29,4 @@ class Mision (tareas: List[Tarea], recompensa: (Equipo => Unit)){
   }
 
 
-
-
-//  //  Punto 3
-//  def hacerMision(m: Mision): ResultadoMision = m.ejecutarMision(this)
-//
-//  //  Punto 4 ---> Pasado a Taberna.class
 }

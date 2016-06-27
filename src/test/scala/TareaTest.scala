@@ -1,109 +1,192 @@
-//import org.junit.Assert._
-//import org.junit.Test
-//
-///**
-//  * Created by jon-VBox-w7 on 23/06/2016.
-//  */
-//class TareaTest {
-//  //Test para validar tareas
-//
-//  val facilidad_pelear_contra_monstruo = (h :Heroe) =>
-//    h.equipo match {
-//      case Some(equipo) => equipo.lider() match {
-//        case Some(lider)
-//        case Some(lider) => lider.trabajo match {
-//          case Some(Guerrero) => 20
-//          case _ => 10
-//        }
-//        case _ => 11
-//      }
-//      case _ => 12
-//    }
-//
-//  val efecto_pelear_contra_monstruo = (h :Heroe) => if (h.stats.fuerza<20) h.copy(stats = h.stats.setearHp(1)) else h
-//
-//  val efecto_Forzar_Puerta = (unHeroe :Heroe) =>
-//    if (!unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)) unHeroe.copy(stats = unHeroe.stats.subirFuerza(1).subirHp(-5)) else unHeroe
-//
-//  val facilidad_Forzar_Puerta = (unHeroe :Heroe) =>
-//  unHeroe.equipo match {
-//      case None => unHeroe.stats.inteligencia
-//      case Some(equipo) => unHeroe.stats.inteligencia + equipo.heroes.filter(heroe => heroe.trabajaDe(Ladron)).map(heroe => 10).sum
-//    }
-//
-//
-//  @Test
-//  def efectoForzarPuertaGuerrero(): Unit = {
-//    val alf = new Heroe(new Stats(10,19,10,10), Some(Guerrero))
-//    val auxAlf = efecto_Forzar_Puerta(alf)
-//    assertEquals(auxAlf.stats.hp,5)
-//    assertEquals(auxAlf.stats.fuerza,20)
-//  }
-//
-//  @Test
-//  def efectoForzarPuertaMago(): Unit = {
-//    val duende = new Heroe(new Stats(10,19,10,10), Some(Mago))
-//    val auxDuende = efecto_Forzar_Puerta(duende)
-//    assertEquals(auxDuende.stats.hp,10)
-//    assertEquals(auxDuende.stats.fuerza,19)
-//  }
-//
-//  @Test
-//  def facilidadForzarPuertaConLadronesEnElEquipo(): Unit = {
-//    val jonny = new Heroe(new Stats(10,19,10,10), Some(Guerrero)) //(20,25,10,1)
-//    val jonas = new Heroe(new Stats(20,20,1,1), Some(Mago)) // (20,1,1,21)
-//    val matias = new Heroe(new Stats(30,10,5,5), Some(Ladron)) // (25,10,15,5)
-//    val losDragones = new Equipo("Los Dragones", List(jonny, jonas, matias),0)
-//
-//    jonny.unirseAEquipo(losDragones)
-//    jonas.unirseAEquipo(losDragones)
-//    matias.unirseAEquipo(losDragones)
-//
-//    assertEquals(facilidad_Forzar_Puerta(jonny),20)
-//    assertEquals(facilidad_Forzar_Puerta(jonas),11)
-//  }
-//
-//
-//  @Test
-//  def facilidadForzarPuertaSinLadronesEnElEquipo(): Unit = {
-//    val alf = new Heroe(new Stats(10,19,10,10), Some(Guerrero)) //(20,25,10,1)
-//    val duende = new Heroe(new Stats(20,20,1,1), Some(Mago)) // (20,1,1,21)
-//    val malditos = new Equipo("Los Dragones", List(duende, alf),0)
-//
-//    alf.unirseAEquipo(malditos)
-//    duende.unirseAEquipo(malditos)
-//
-//    assertEquals(facilidad_Forzar_Puerta(alf),10)
-//    assertEquals(facilidad_Forzar_Puerta(duende),1)
-//  }
-//
-//  @Test
-//  def facilidadForzarPuertaSinEquipo(): Unit = {
-//    val alf = new Heroe(new Stats(10,19,10,10), Some(Guerrero)) //(20,25,10,1)
-//
-//    assertEquals(facilidad_Forzar_Puerta(alf),10)  //Si el heroe es ladron que pasa??? se suma +10???
-//  }
-//
-//
-//  @Test
-//  def tareaMasCondicion(): Unit = {
-//    val jonny = new Heroe(new Stats(10,19,10,10), Some(Guerrero)) //(20,25,10,1)
-//    val jonas = new Heroe(new Stats(20,20,1,1), Some(Mago)) // (20,1,1,21)
-//    val matias = new Heroe(new Stats(30,10,5,5), Some(Ladron)) // (25,10,15,5)
-//    val losDragones = new Equipo("Los Dragones", List(jonny, jonas, matias),100)
-//    jonny.unirseAEquipo(losDragones)
-//    jonas.unirseAEquipo(losDragones)
-//    matias.unirseAEquipo(losDragones)
-//
-//    val condicion_pelearContraMonstruo = (e: Equipo) => true
-//    val pelearContraMonstruo = new Tarea("Pelea Contra Monstruo",condicion_pelearContraMonstruo, facilidad_pelear_contra_monstruo,efecto_pelear_contra_monstruo)
-//
-//    //facilidad ok
-//    assertEquals(facilidad_pelear_contra_monstruo(jonas),20)
-//    assertEquals(losDragones.lider().get,jonny)
-//    assertEquals(efecto_pelear_contra_monstruo(jonny).stats.hp,1) //efecto ok
-//
-//    assertEquals(pelearContraMonstruo.puedeRealizarTarea(losDragones),TareaPuedeRealizarse(losDragones, jonny)) //Tarea ----> esto devuelve una tarea no un numero
-//  }
-//
-//}
+import org.junit.Assert._
+import org.junit.{Before, Test}
+
+class TareaTest {
+
+  val pelearContraMonstruo = (unHeroe:Heroe) => if (unHeroe.atributos().fuerza<20) unHeroe.pelearContraMonstruo() else unHeroe
+  val facilidadPelearContraMonstruo= (unEquipo:Equipo) =>  unEquipo.facilidadPelearContraMonstruo()
+
+
+  val forzarPuerta = (unHeroe :Heroe) => if (!unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)) unHeroe.forzarPuerta() else unHeroe
+  val facilidadForzarPuerta = (unHeroe:Heroe,unEquipo:Equipo) =>  unEquipo.facilidadForzarPuerta(unHeroe)
+
+  val robarTalisman = (unHeroe:Heroe, unItem:Item) =>  unHeroe.robarTalisman(unItem)
+  val facilidadRobarTalisman = (unHeroe:Heroe,unEquipo:Equipo) =>  unEquipo.facilidadRobarTalisman(unHeroe)
+
+
+  var equipoVacio  :Equipo = _
+  var losSinTrabajo:Equipo = _
+  var losMagicos:Equipo = _
+  var losLadrones:Equipo = _
+  var losDosLadrones:Equipo = _
+  var losGuerreros:Equipo = _
+
+
+
+
+  var unLadron:Heroe = _
+  var unGuerrero:Heroe = _
+  var unMago:Heroe = _
+  var unSinTrabajo:Heroe = _
+  var unoDe_Treinta_Cinco:Heroe = _
+  var un_debil:Heroe = _
+
+
+  var  cascoVikingo:Item = _
+  val condicion_cascoVikingo = (h: Heroe) => h.stats.fuerza > 30
+  val efecto_cascoVikingo    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(hp = s.hp+10))
+  }
+
+
+  @Before
+  def initialize() = {
+    unLadron = new Heroe(new Stats(25,25,25,25),Some(Ladron))
+    unGuerrero = new Heroe(new Stats(25,25,25,25),Some(Guerrero))
+    unMago = new Heroe(new Stats(25,25,25,25),Some(Mago))
+    unSinTrabajo = new Heroe(new Stats(25,25,25,25))
+    unoDe_Treinta_Cinco = new Heroe(new Stats(35,35,35,35))
+    un_debil = new Heroe(new Stats(1,1,1,1))
+
+
+    losSinTrabajo = new Equipo("Los Sin Trabajo", List(unSinTrabajo, unoDe_Treinta_Cinco),100)
+    losMagicos = new Equipo("Las Magicos", List(un_debil, unMago),100)
+    losLadrones = new Equipo("Las Magicos", List(un_debil, unLadron),100)
+    losDosLadrones = new Equipo("Las Magicos", List(un_debil, unLadron,unLadron),100)
+    losGuerreros = new Equipo("Las Magicos", List(un_debil, unGuerrero),100)
+
+
+    cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
+
+  }
+
+  //Test para probar de la tarea el pelear contra un mounstruo: 4
+  //Desc: "reduce la vida de cualquier héroe con fuerza <20"
+  @Test
+  def pelearContraMonstruo_un_Guerrero(): Unit = {  //(10,15,0,-10)
+    assertEquals(pelearContraMonstruo(unGuerrero).atributos().hp,35)
+  }
+
+  @Test
+  def pelearContraMonstruo_un_Ladron(): Unit = {   //(-5,0,10,0)
+    assertEquals(pelearContraMonstruo(unLadron).atributos().hp,20)
+  }
+
+  @Test
+  def pelearContraMonstruo_un_Mago(): Unit = {   //(0,-20,0,20)
+    assertEquals(pelearContraMonstruo(unMago).atributos().hp,1)
+  }
+  @Test
+  def pelearContraMonstruo_un_SinTrabajo(): Unit = {
+    assertEquals(pelearContraMonstruo(unSinTrabajo).atributos().hp,25)
+  }
+
+
+  //Test para probar de la tarea el Forzar Puerta:4
+  //Desc: "no le hace nada a los magos ni a los ladrones, pero sube la  fuerza de todos los demás en 1 y baja en 5 su hp"
+  @Test
+  def forzarPuerta_Guerrero(): Unit = {
+    assertEquals(forzarPuerta(unGuerrero).stats.hp,20)   //(10,15,0,-10)
+    assertEquals(forzarPuerta(unGuerrero).stats.fuerza,26)
+  }
+
+  @Test
+  def forzarPuerta_Ladron(): Unit = {   //(-5,0,10,0)
+    assertEquals(forzarPuerta(unLadron).stats.hp,25)
+    assertEquals(forzarPuerta(unLadron).stats.fuerza,25)
+  }
+
+  @Test
+  def forzarPuerta_Mago(): Unit = {   //(0,-20,0,20)
+    assertEquals(forzarPuerta(unMago).stats.hp,25)
+    assertEquals(forzarPuerta(unMago).stats.fuerza,25)
+  }
+
+  @Test
+  def forzarPuerta_SinTrabajo(): Unit = {
+    assertEquals(forzarPuerta(unSinTrabajo).stats.hp,20)
+    assertEquals(forzarPuerta(unSinTrabajo).stats.fuerza,26)
+  }
+
+  //Test para probar de la tarea el robar Talisman:5
+  //Desc: "le agrega un talismán al héroe"
+  @Test
+  def robarTalisman_Con_unHeroeDe_Treinta_Cinco(): Unit = {  // + (10,0,0,0)
+    assertEquals(robarTalisman(unoDe_Treinta_Cinco, cascoVikingo).atributos().hp,45)
+  }
+
+  @Test
+  def robarTalisman_Guerrero(): Unit = {   //+(10,15,0,-10) + (10,0,0,0)
+    assertEquals(robarTalisman(unGuerrero, cascoVikingo).atributos().hp,35)
+  }
+
+  @Test
+  def robarTalisman_Ladron(): Unit = {   //(-5,0,10,0) + (10,0,0,0)
+    assertEquals(robarTalisman(unLadron, cascoVikingo).atributos().hp,20)
+  }
+
+  @Test
+  def robarTalisman_Mago(): Unit = {   //(0,-20,0,20) + (10,0,0,0)
+    assertEquals(robarTalisman(unMago, cascoVikingo).atributos().hp,25)
+  }
+
+  @Test
+  def robarTalisman_SinTrabajo(): Unit = { //+ (10,0,0,0)
+    assertEquals(robarTalisman(unSinTrabajo, cascoVikingo).stats.hp,25)
+    assertEquals(robarTalisman(unSinTrabajo, cascoVikingo).stats.fuerza,25)
+  }
+
+  //Test para probar la facilidad de pelear contra mounstruo: 4
+  //Desc: "tiene una facilidad de 10 para cualquier héroe o 20 si  el líder del equipo es un guerrero"
+  @Test
+  def facilidadDe_pelearContraMonstruo_ConLider_Guerrero(): Unit = {
+    assertEquals(facilidadPelearContraMonstruo(losGuerreros),20)
+  }
+
+  @Test
+  def facilidadDe_pelearContraMonstruo_ConLider_Ladron(): Unit = {
+    assertEquals(facilidadPelearContraMonstruo(losLadrones),10)
+  }
+
+  @Test
+  def facilidadDe_pelearContraMonstruo_ConLider_Mago(): Unit = {
+    assertEquals(facilidadPelearContraMonstruo(losMagicos),10)
+  }
+
+  @Test
+  def facilidadDe_pelearContraMonstruo_ConLider_SinTrabajo(): Unit = {
+    assertEquals(facilidadPelearContraMonstruo(losSinTrabajo),10)
+  }
+
+
+  //Test para probar la facilidad de forzar la puerta : 3
+  //Desc: "tiene facilidad igual a la inteligencia del  héroe + 10 por cada ladrón en su equipo"
+  @Test
+  def facilidadDe_ForzarPuerta_Sin_Ladrones_en_el_Equipo(): Unit = {
+    assertEquals(facilidadForzarPuerta(unSinTrabajo,losSinTrabajo),25)
+  }
+
+  @Test
+  def facilidadDe_ForzarPuerta_Con_un_Ladron_en_el_Equipo(): Unit = {
+    assertEquals(facilidadForzarPuerta(un_debil,losLadrones),11)
+  }
+
+  @Test
+  def facilidadDe_ForzarPuerta_Con_Dos_Ladron_en_el_Equipo(): Unit = {
+    assertEquals(facilidadForzarPuerta(un_debil,losDosLadrones),21)
+  }
+
+  //Test para probar la facilidad de Robar Talisman: 2
+  //Desc: "tiene facilidad igual a la  velocidad del héroe, pero no puede ser hecho por equipos cuyo líder no sea un ladrón"
+  @Test
+  def facilidad_RobarTalisman_ConLider_Ladron(): Unit = {
+    assertEquals(facilidadRobarTalisman(unSinTrabajo,losLadrones),25)
+  }
+
+  @Test
+  def facilidad_RobarTalisman_SinLider_Ladron(): Unit = {
+    assertEquals(facilidadRobarTalisman(unSinTrabajo,losSinTrabajo),-1)
+  }
+
+}

@@ -1,15 +1,15 @@
 import scala.util.Try
 
-case object EquipoVacioException extends Exception
-case object NoHacerNingunaMisionException extends Exception
+//case object EquipoVacioException extends Exception
+//case object NoHacerNingunaMisionException extends Exception
 
-trait ResultadoEntrenamiento
-case class EntrenamientoFallido(t: Tarea) extends ResultadoEntrenamiento
-case class EntrenamientoSuperado(e: Equipo) extends ResultadoEntrenamiento
+//trait ResultadoEntrenamiento
+//case class EntrenamientoFallido(t: Tarea) extends ResultadoEntrenamiento
+//case class EntrenamientoSuperado(e: Equipo) extends ResultadoEntrenamiento
 
 case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Option[Heroe] = None) {
 
-//  Punto 2
+//  Punto 2:5
   def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = heroes match {
     case Nil => None
     case _ => Some(heroes.maxBy(f(_)))
@@ -46,5 +46,13 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
 
     }
   }
+
+
+  //Punto 3
+  def facilidadPelearContraMonstruo(): Int = if (obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
+  def facilidadForzarPuerta(unHeroe:Heroe): Int = unHeroe.atributos().inteligencia + heroes.filter(_.trabajaDe(Ladron)).size *10
+  def facilidadRobarTalisman(unHeroe:Heroe):Int = if (obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
+
+
 
 }
