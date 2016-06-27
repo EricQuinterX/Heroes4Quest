@@ -21,6 +21,13 @@ class EquipoTest {
     s.setear(s.copy(fuerza = s.fuerza+2))
   }
 
+
+  val condicion_palitoMagico = (h: Heroe) => h.trabajaDe(Mago) || (h.trabajaDe(Ladron) && h.stats.inteligencia > 30)
+  val efecto_palitoMagico    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(inteligencia = s.inteligencia+20))
+  }
+
   @Before
   def initialize() = {
     val juan = new Heroe(new Stats(10,10,10,10))
@@ -103,7 +110,7 @@ class EquipoTest {
     assertEquals(losSinTrabajo2.obtenerLider().lider, None)
   }
 
-  //Test para probar el obtener item de un Equipo: 3
+  //Test para probar el obtener item de un Equipo: 4
   @Test
   def obtenerItem_CumpleConciconUnHeroe(): Unit = {
 
@@ -133,5 +140,18 @@ class EquipoTest {
 
     val equipoVacio2 = equipoVacio.obtieneItem(cascoVikingo)
     assertEquals(equipoVacio2.pozoDeOro, 300)
+  }
+
+  @Test
+  def obtenerItem_CumpleCondicion_Con_Mago(): Unit = {
+
+    val mago = new Heroe(new Stats(75,50,50,100),Some(Mago))//(0,-20,0,20)
+    val losSinTrabajo2= losSinTrabajo.obtieneMiembro(mago)
+    val palitoMagico = new Item("Palito Magico", 150, Mano(1), efecto_palitoMagico, condicion_palitoMagico)
+
+    val losSinTrabajo3 = losSinTrabajo2.obtieneItem(palitoMagico) // (0,0,0,20)
+    assertEquals(mago.equiparseItem(palitoMagico).atributos().inteligencia, 140)
+    assertEquals(mago.equiparseItem(palitoMagico).atributos().fuerza, 30)
+    assertEquals(losSinTrabajo3.obtenerLider().lider.get.atributos().hp,75)
   }
 }
