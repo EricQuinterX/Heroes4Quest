@@ -15,6 +15,12 @@ class EquipoTest {
     s.setear(s.copy(hp = s.hp+10))
   }
 
+  val condicion_arcoViejo = (h: Heroe) => h.stats.hp > 30
+  val efecto_arcoViejo    = (h: Heroe) => {
+    val s = h.stats
+    s.setear(s.copy(fuerza = s.fuerza+2))
+  }
+
   @Before
   def initialize() = {
     val juan = new Heroe(new Stats(10,10,10,10))
@@ -104,10 +110,12 @@ class EquipoTest {
     val juanGuerrero = new Heroe(new Stats(40,60,30,30))
     val losSinTrabajo2= losSinTrabajo.obtieneMiembro(juanGuerrero)
 
-    val cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
-
-    val losSinTrabajo3 = losSinTrabajo2.obtieneItem(cascoVikingo)
-    assertEquals(losSinTrabajo3.obtenerLider().lider.get.stats.hp, 40)
+    val arcoViejo = new Item("Arco Viejo", 200, Mano(2), efecto_arcoViejo, condicion_arcoViejo)
+    assertEquals(juanGuerrero.equiparseItem(arcoViejo).atributos().fuerza, 62)
+    val losSinTrabajo3 = losSinTrabajo2.obtieneItem(arcoViejo)
+    val losSinTrabajo4 = losSinTrabajo3.obtenerLider()
+    assertEquals(losSinTrabajo4.pozoDeOro, 100)
+    assertEquals(losSinTrabajo4.lider.get.atributos().fuerza,62)
   }
 
   @Test

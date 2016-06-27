@@ -18,16 +18,18 @@ case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inv
     case Some(Guerrero) => atributos().fuerza
     case Some(Mago) => atributos().inteligencia
     case Some(Ladron) => atributos().velocidad
-    case None => atributos().atributoMaximo() // En caso que no tenga trabajo elijo el atributo maximo
+    case None => atributos().atributoMaximo()
   }
 
-  def equiparseItem(item: Item) : Heroe = if (item.validarCondicion(this)) copy(inventario = inventario.meter(item)) else this
+  def equiparseItem(item: Item) : Heroe = {
+    if (item.validarCondicion(this)) copy(inventario = inventario.meter(item))
+    else this
+  }
   def descartarItem(item: Item) = copy(inventario = inventario.sacar(item))
 
   def nivelMejora(itemNuevo: Item) : Int = {
     val beneViejoItem: Int = atributoPrincipal()
-    val beneNuevoitem: Int = copy(inventario = inventario.meter(itemNuevo)).atributoPrincipal()
-
+    val beneNuevoitem: Int = equiparseItem(itemNuevo).atributoPrincipal()
     beneNuevoitem - beneViejoItem
   }
 

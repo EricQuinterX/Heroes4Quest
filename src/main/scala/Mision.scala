@@ -11,12 +11,12 @@ class Mision (tareas: List[Tarea], recompensa: (Equipo => Unit)){
       MisionSuperada(unEquipo)
     case tarea :: restoTareas => tarea.puedeRealizarTarea(unEquipo) match {
       case TareaPuedeRealizarse(equipo, heroe) => ejecutarMision(tarea.aplicarEfecto(heroe, equipo), restoTareas)
-      case TareaNosePuedeRealizar(_,tarea) => MisionFallida(unEquipo, tarea)
+      case TareaNosePuedeRealizar(_,tarea1) => MisionFallida(unEquipo, tarea1)
     }
   }
 
   def ejecutarMision2(equipoInicial: Equipo): ResultadoMision = {
-      val equipoFinal = tareas.foldLeft(equipoInicial) {(equipo,unaTarea) => this.realizarTarea(equipo, unaTarea)}
+      val equipoFinal = tareas.foldLeft(equipoInicial) {(equipo,unaTarea) => realizarTarea(equipo, unaTarea)}
       MisionSuperada(equipoFinal)
   }
 

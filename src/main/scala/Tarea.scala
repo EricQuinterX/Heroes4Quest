@@ -10,7 +10,6 @@ class Tarea (name: String,
 
   def puedeRealizarTarea(unEquipo: Equipo): ResultadoTarea = {
     if (!condicion(unEquipo)) TareaNosePuedeRealizar(unEquipo, this)
-
     unEquipo.mejorHeroeSegun(fxFacilidad) match {
       case None => TareaNosePuedeRealizar(unEquipo, this)
       case Some(mejorHeroe) => TareaPuedeRealizarse(unEquipo, mejorHeroe)
@@ -18,8 +17,8 @@ class Tarea (name: String,
   }
 
   def aplicarEfecto(mejorHeroe: Heroe, unEquipo: Equipo): Equipo = {
-      val nuevoHeroe = efecto(mejorHeroe)
-      unEquipo.reemplazarMiembro(nuevoHeroe, mejorHeroe)
+    val nuevoHeroe = efecto(mejorHeroe)
+    unEquipo.reemplazarMiembro(nuevoHeroe, mejorHeroe)
   }
 }
 
