@@ -12,7 +12,7 @@ case class Inventario(items: List[Item] = Nil){
 
   def cantidadItems = items.size
 
-  def meter(item: Item) = copy(items = item :: items.filter(_.parte!=item.parte))
+  def meter(item: Item) = copy(items = (item :: items.filter(_.parte!=item.parte)).reverse)
 
   def sacar(item: Item) = copy(items = items.filter(_ != item))
 

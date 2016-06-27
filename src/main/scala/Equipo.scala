@@ -47,10 +47,4 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
     }
   }
 
-
-
-
-
-
-
 }

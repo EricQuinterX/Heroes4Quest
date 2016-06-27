@@ -136,8 +136,7 @@ class EquipoTest {
 
   @Test
   def obtenerItem_NoCumpleCondicion_Por_EquipoVacio(): Unit = {
-     val cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
-
+    val cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
     val equipoVacio2 = equipoVacio.obtieneItem(cascoVikingo)
     assertEquals(equipoVacio2.pozoDeOro, 300)
   }
