@@ -22,6 +22,12 @@ case class Inventario(items: List[Item] = Nil){
         case None => unHeroe.stats
       }
     val h = unHeroe.copy(stats = nuevoStat)
-    items.foldLeft (h) ((heroe,unItem) => unItem.aplicarEfecto(heroe)).stats// regreso los nuevos atributos
+    reductoInventario(h,items)
+    //items.foldLeft (h) ((heroe,unItem) => unItem.aplicarEfecto(heroe)).stats// regreso los nuevos atributos
+  }
+
+  def reductoInventario(heroe: Heroe,items:List[Item]): Stats = items match {
+    case Nil => heroe.copy().stats
+    case item :: restoItems => reductoInventario(item.aplicarEfecto(heroe), restoItems)
   }
 }

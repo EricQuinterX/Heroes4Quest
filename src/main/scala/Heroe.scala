@@ -26,6 +26,7 @@ case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inv
   }
 
 
+
   //Funciones para el trabajo:3
   def trabajaDe(unTrabajo: Trabajo) = trabajo match {case Some(x) if x == unTrabajo => true ; case _ => false}
   def dejarTrabajo() = copy(trabajo = None)
