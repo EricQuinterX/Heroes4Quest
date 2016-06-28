@@ -14,6 +14,7 @@ class Trabajo(hp: Int, fuerza: Int, velocidad: Int, inteligencia: Int, principal
       case Velocidad => velocidad
     }
   }
+
 }
 
 case object Guerrero extends Trabajo (10,15,0,-10,Fuerza)
