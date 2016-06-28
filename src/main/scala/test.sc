@@ -1,22 +1,35 @@
 object test{
-  class Clase(num:Int){
 
-    def valor(): Int ={
-      num
-    }
-  }
+    type funcionTarea =(Int =>Int)
+  //def mapTarea(f:Int=>Int,valor:Int)= f(valor)
 
-
-  var o1= new Clase(14)
-  var o2= new Clase(14)
-  var o3= new Clase(14)
-
-  val miLista = List(o1,o2,o3)
+  val porDos:funcionTarea = _ * 2
+  val cuadrado:funcionTarea = {(a:Int) => a*a}
+  val suma:funcionTarea = (a:Int) => a + 50
 
 
-  val algo= miLista.foldLeft(miLista.head){(res,objeto) => if (res.valor() > objeto.valor())res else objeto}
+  //mapTarea(porDos,8)
+  //mapTarea(cuadrado,9)
 
-  miLista.filter(_.valor() ==algo.valor())
+  val miLista = List(porDos,cuadrado,suma)
+
+  def aplicandoMap_Funciones (valor:Int)= miLista.map{(t:funcionTarea)=>t(valor)}
+
+  def aplicandoFold_Funciones (valor:Int)= miLista.foldLeft(valor) { (res: Int, t: funcionTarea) =>  t(res) }
+  aplicandoFold_Funciones(5)
+
+
+
+// var o1= new Clase(14)
+// var o2= new Clase(14)
+// var o3= new Clase(14)
+//
+// val miLista = List(o1,o2,o3)
+//
+//
+// val algo= miLista.foldLeft(miLista.head){(res,objeto) => if (res.valor() > objeto.valor())res else objeto}
+//
+//  miLista.filter(_.valor() ==algo.valor())
 //  def validar(unaClase:Clase,otraClase:Clase): Clase ={
 //
 //    if (unaClase.valor() > otraClase.valor()) unaClase

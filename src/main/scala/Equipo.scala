@@ -53,6 +53,6 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
   def facilidadForzarPuerta(unHeroe:Heroe): Int = unHeroe.atributos().inteligencia + heroes.filter(_.trabajaDe(Ladron)).size *10
   def facilidadRobarTalisman(unHeroe:Heroe):Int = if (obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
 
-
+  def mayorFacilidad_De_Realizar(unaTarea:Tarea) = ???
 
 }

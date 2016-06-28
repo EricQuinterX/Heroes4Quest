@@ -15,9 +15,4 @@ case class Stats (hp: Int = 1, fuerza: Int = 1, velocidad: Int = 1, inteligencia
       inteligencia = if (s.inteligencia<1) 1 else s.inteligencia)
   }
 
-
-
-  //Para las tareas
-  def reducirHP() : Stats = copy(hp = 1, fuerza, velocidad, inteligencia)
-  def subirFuerzaBajarHP() : Stats = copy(hp = hp - 5, fuerza +1, velocidad, inteligencia)
 }

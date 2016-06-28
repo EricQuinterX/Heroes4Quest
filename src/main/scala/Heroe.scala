@@ -43,13 +43,9 @@ case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inv
 
 
   //funciona para las Tareas:3
-  def pelearContraMonstruo () : Heroe = copy( stats= stats.reducirHP())
-  def forzarPuerta         () : Heroe = copy( stats= stats.subirFuerzaBajarHP())
+  def pelearContraMonstruo () : Heroe = copy(stats = stats.setear(stats.copy(hp = 1,fuerza = stats.fuerza,velocidad = stats.velocidad,inteligencia = stats.inteligencia)))
+  def forzarPuerta         () : Heroe = copy(stats = stats.setear(stats.copy(hp = stats.hp-5,fuerza = stats.fuerza+1,velocidad = stats.velocidad,inteligencia = stats.inteligencia)))
   def robarTalisman  (i:Item) : Heroe = this.equiparseItem(i)
-
-
-
-
 
 }
 

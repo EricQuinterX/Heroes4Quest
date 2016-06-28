@@ -1,22 +1,11 @@
-trait ResultadoTarea
-case class TareaPuedeRealizarse(equipo: Equipo, heroe: Heroe) extends ResultadoTarea
-case class TareaNosePuedeRealizar(e: Equipo, t: Tarea) extends ResultadoTarea
 
+class Tarea (name: String, condicion: (Option[Heroe] => Boolean), facilidad: ((Equipo) => Int), condicion_facilidad:(Equipo)=> Boolean, efecto: ((Option[Heroe], Item) => Option[Heroe]),unItem: Item){
 
-class Tarea (name: String, condicion: (Equipo => Boolean), fxFacilidad: (Heroe => Int), efecto: (Heroe => Heroe)){
+  def realizarTarea(unHeroe: Option[Heroe]):Option[Heroe] = efecto(unHeroe,unItem)
 
-  def puedeRealizarTarea(unEquipo: Equipo): ResultadoTarea = {
-    if (!condicion(unEquipo)) TareaNosePuedeRealizar(unEquipo, this)
-    unEquipo.mejorHeroeSegun(fxFacilidad) match {
-      case None => TareaNosePuedeRealizar(unEquipo, this)
-      case Some(mejorHeroe) => TareaPuedeRealizarse(unEquipo, mejorHeroe)
-    }
-  }
+  def condicionTarea(unHeroe:Option[Heroe]):Boolean = condicion (unHeroe)
 
-  def aplicarEfecto(mejorHeroe: Heroe, unEquipo: Equipo): Equipo = {
-    val nuevoHeroe = efecto(mejorHeroe)
-    unEquipo.reemplazarMiembro(nuevoHeroe, mejorHeroe)
-  }
+  def condicion_Facilidad(unEquipo:Equipo): Boolean = condicion_facilidad(unEquipo)
 
 
 
