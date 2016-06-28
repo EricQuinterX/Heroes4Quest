@@ -37,9 +37,8 @@ class ItemsTest {
   val condicion_talismanDedicacion = (h: Heroe) => true
   val efecto_talismanDedicacion    = (h: Heroe) => {
     val subida = h.atributoPrincipal() * 0.1
-    val redondeo = math.ceil(subida).toInt
-    val s = h.atributos()
-    new Stats(s.hp+redondeo,s.fuerza+redondeo,s.velocidad+redondeo,s.inteligencia+redondeo)
+//    val redondeo = math.ceil(subida).toInt
+    new Stats()
   }
 
   val condicion_talismanMinimalista = (h: Heroe) => true
