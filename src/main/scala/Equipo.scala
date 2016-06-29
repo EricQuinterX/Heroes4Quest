@@ -7,13 +7,14 @@ import scala.util.Try
 //case class EntrenamientoFallido(t: Tarea) extends ResultadoEntrenamiento
 //case class EntrenamientoSuperado(e: Equipo) extends ResultadoEntrenamiento
 
-case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Option[Heroe] = None) {
+case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider: Option[Heroe] = None) {
 
 //  Punto 2:5
-  def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = heroes match {
-    case Nil => None
-    case _ => Some(heroes.maxBy(f(_)))
-  }
+  def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = Try(Some(heroes.maxBy(f(_)))) getOrElse None
+//  heroes match {
+//    case Nil => None
+//    case _ => Some(heroes.maxBy(f(_)))
+//  }
 
   def obtieneItem(item: Item): Equipo = {
     val candidato = heroes.foldLeft(heroes.headOption) { (resultado, unHeroe) =>
@@ -39,9 +40,12 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
     }
     else {
       val posibleLider = heroes.foldLeft(heroes.head) { (resultado, heroe) =>
-        if (resultado.atributoPrincipal() > heroe.atributoPrincipal()) resultado else heroe
+        if (resultado.atributos().principal(resultado.trabajo) > heroe.atributos().principal(heroe.trabajo))
+          resultado
+        else heroe
       }
-      val otraLista = heroes.filter(_.atributoPrincipal() == posibleLider.atributoPrincipal())
+      val att_principal = posibleLider.atributos().principal(posibleLider.trabajo)
+      val otraLista = heroes.filter(x => x.atributos().principal(x.trabajo) == att_principal)
       if (otraLista.size == 1) copy(lider = Some(posibleLider)) else copy(lider = None)
 
     }
@@ -50,17 +54,17 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
 
   //Punto 3
   def facilidadPelearContraMonstruo():      Int = if (obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
-  def facilidadForzarPuerta(unHeroe:Heroe): Int = unHeroe.atributos().inteligencia + heroes.filter(_.trabajaDe(Ladron)).size *10
+  def facilidadForzarPuerta(unHeroe:Heroe): Int = unHeroe.atributos().inteligencia + heroes.count(_.trabajaDe(Ladron)) *10
   def facilidadRobarTalisman(unHeroe:Heroe):Int = if (obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
 
 
   //Aqui rompe, lo que hay que hacer es preguntar por cada tarea que heroe tiene mayor facilidad
   // luego devolverlo
-  def mayorFacilidad_De_Realizar(tareas: List[Tarea]):Heroe= {
-    val listaNumeros = heroes.map(_.esMejorPara(tareas.head, this))
-
-    val zorro = new Heroe(new Stats(25,25,25,25),Some(Ladron))
-    zorro
-  }
+//  def mayorFacilidad_De_Realizar(tareas: List[Tarea]):Heroe= {
+//    val listaNumeros = heroes.map(_.esMejorPara(tareas.head, this))
+//
+//    val zorro = new Heroe(new Stats(25,25,25,25),Some(Ladron))
+//    zorro
+//  }
 
 }

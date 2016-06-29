@@ -71,13 +71,13 @@ class EquipoTest {
   //Test para probar el reemplazar miembro de un Equipo: 1
    @Test
    def reemplazarMiembroDeUnEquipo(): Unit = {
-     val juanViejo = new Heroe(new Stats(40,40,40,40))
-     val losSinTrabajo2= losSinTrabajo.obtieneMiembro(juanViejo)
-     val juanNuevo = new Heroe(new Stats(1,1,1,1))
-
-     val losSinTrabajo3 = losSinTrabajo2.reemplazarMiembro(juanNuevo, juanViejo)
-     assertEquals(losSinTrabajo3.heroes.contains(juanNuevo), true)
-     assertEquals(losSinTrabajo3.heroes.contains(juanViejo), false)
+    val juanViejo = new Heroe(new Stats(40,40,40,40))
+    val losSinTrabajo2= losSinTrabajo.obtieneMiembro(juanViejo)
+    val juanNuevo = new Heroe(new Stats(1,1,1,1))
+    val losSinTrabajo3 = losSinTrabajo2.reemplazarMiembro(juanNuevo, juanViejo)
+//    assertEquals(juanNuevo.equipo.get, losSinTrabajo3) ---> por algo no esta en el enunciado xD
+    assertEquals(losSinTrabajo3.heroes.contains(juanNuevo), true)
+    assertEquals(losSinTrabajo3.heroes.contains(juanViejo), false)
     assertEquals(losSinTrabajo3.heroes.size, 4)
    }
 

@@ -36,9 +36,11 @@ class ItemsTest {
 
   val condicion_talismanDedicacion = (h: Heroe) => true
   val efecto_talismanDedicacion    = (h: Heroe) => {
-    val subida = h.atributoPrincipal() * 0.1
-//    val redondeo = math.ceil(subida).toInt
-    new Stats()
+    val s: Stats = h.stats
+    val subida: Double = s.principal(h.trabajo) * 0.1
+    val redondeo: Int = math.ceil(subida).toInt
+    s.copy(hp = s.hp+redondeo, fuerza = s.fuerza+redondeo, velocidad = s.velocidad+redondeo, inteligencia = s.inteligencia+redondeo)
+//    new Stats()
   }
 
   val condicion_talismanMinimalista = (h: Heroe) => true
@@ -245,7 +247,7 @@ class ItemsTest {
   def talismanDe_Dedicacion_Sin_Trabajo(): Unit = {
     val jonny = new Heroe(new Stats  (10,10,10,10))
     val jonny2=jonny.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
-    assertEquals(jonny2.atributos().hp,10)
+    assertEquals(jonny2.atributos().hp,11)
   }
 
 

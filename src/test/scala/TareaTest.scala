@@ -13,6 +13,14 @@ class TareaTest {
   val robarTalisman = (unHeroe:Heroe, unItem:Item) =>  unHeroe.robarTalisman(unItem)
   val facilidadRobarTalisman = (unHeroe:Heroe,unEquipo:Equipo) =>  unEquipo.facilidadRobarTalisman(unHeroe)
 
+  val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
+  val facilidad_tareaDificil = (h: Heroe) => h.atributos().principal(h.trabajo)
+  val efecto_tareaDificl = (h: Heroe, e: Equipo) => {
+    val s = h.stats
+    val h1 = h.copy(stats = s.copy(hp = s.hp + 10))
+    val newTeam = e.reemplazarMiembro(h1, h)
+    (h1, newTeam)
+  }
 
   var equipoVacio  :Equipo = _
   var losSinTrabajo:Equipo = _
@@ -20,6 +28,7 @@ class TareaTest {
   var losLadrones:Equipo = _
   var losDosLadrones:Equipo = _
   var losGuerreros:Equipo = _
+  var losVeganos: Equipo = _
 
 
 
@@ -30,6 +39,10 @@ class TareaTest {
   var unSinTrabajo:Heroe = _
   var unoDe_Treinta_Cinco:Heroe = _
   var un_debil:Heroe = _
+  var brocoli: Heroe = _
+  var peregil: Heroe = _
+  var repollo: Heroe = _
+
 
 
   var  cascoVikingo:Item = _
@@ -40,6 +53,10 @@ class TareaTest {
   }
 
 
+  var tareaDificil: Tarea = _
+  var elRegresoDeBroly: Tarea = _
+
+
   @Before
   def initialize() = {
     unLadron = new Heroe(new Stats(25,25,25,25),Some(Ladron))
@@ -48,6 +65,9 @@ class TareaTest {
     unSinTrabajo = new Heroe(new Stats(25,25,25,25))
     unoDe_Treinta_Cinco = new Heroe(new Stats(35,35,35,35))
     un_debil = new Heroe(new Stats(1,1,1,1))
+    brocoli = new Heroe(Stats(40,19,48,99))
+    peregil = new Heroe(Stats(60,55,62,94))
+    repollo = new Heroe(Stats(60,95,30,10))
 
 
     losSinTrabajo = new Equipo("Los Sin Trabajo", List(unSinTrabajo, unoDe_Treinta_Cinco),100)
@@ -55,9 +75,13 @@ class TareaTest {
     losLadrones = new Equipo("Las Magicos", List(un_debil, unLadron),100)
     losDosLadrones = new Equipo("Las Magicos", List(un_debil, unLadron,unLadron),100)
     losGuerreros = new Equipo("Las Magicos", List(un_debil, unGuerrero),100)
+    losVeganos = new Equipo("Los Veganos",List(repollo,peregil,brocoli))
 
 
     cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
+
+
+    tareaDificil = new Tarea("Tarea Dificil",condicion_tareaDificil,facilidad_tareaDificil,efecto_tareaDificl)
 
   }
 
@@ -187,6 +211,13 @@ class TareaTest {
   @Test
   def facilidad_RobarTalisman_SinLider_Ladron(): Unit = {
     assertEquals(facilidadRobarTalisman(unSinTrabajo,losSinTrabajo),-1)
+  }
+
+  @Test
+  def realizarTareaDificil(): Unit = {
+    val tareaRealizada = tareaDificil.realizarTarea(losVeganos)
+    assertEquals(tareaRealizada.resultado, TareaSuperada)
+    assertEquals(tareaRealizada.equipo.get.obtenerLider().lider, 109)
   }
 
 }
