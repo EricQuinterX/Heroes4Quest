@@ -49,10 +49,18 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int, lider: Opt
 
 
   //Punto 3
-  def facilidadPelearContraMonstruo(): Int = if (obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
+  def facilidadPelearContraMonstruo():      Int = if (obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
   def facilidadForzarPuerta(unHeroe:Heroe): Int = unHeroe.atributos().inteligencia + heroes.filter(_.trabajaDe(Ladron)).size *10
   def facilidadRobarTalisman(unHeroe:Heroe):Int = if (obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
 
-  def mayorFacilidad_De_Realizar(unaTarea:Tarea) = ???
+
+  //Aqui rompe, lo que hay que hacer es preguntar por cada tarea que heroe tiene mayor facilidad
+  // luego devolverlo
+  def mayorFacilidad_De_Realizar(tareas: List[Tarea]):Heroe= {
+    val listaNumeros = heroes.map(_.esMejorPara(tareas.head, this))
+
+    val zorro = new Heroe(new Stats(25,25,25,25),Some(Ladron))
+    zorro
+  }
 
 }

@@ -8,19 +8,14 @@ class MisionTest {
   val condicion_facilidad_Forzar = (unEquipo:Equipo) =>true
   val condicion_facilidad_Robar  = (unEquipo:Equipo) =>unEquipo.obtenerLider().lider.get.trabajaDe(Ladron)
 
+  val facilidad_Valor_Pelear = (unHeroe:Heroe,unEquipo:Equipo) =>   if (unEquipo.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
+  val facilidad_Valor_Forzar= (unHeroe:Heroe,unEquipo:Equipo) => unHeroe.atributos().inteligencia + unEquipo.heroes.filter(_.trabajaDe(Ladron)).size *10
+  val facilidad_Valor_Robar = (unHeroe:Heroe,unEquipo:Equipo) =>  if (unEquipo.obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
 
-  val pelear_Condicion= (unHeroe:Heroe) => unHeroe.atributos().fuerza<20
-  val pelear_Facilidad= (unEquipo:Equipo) =>   if (unEquipo.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
-  val pelear_Efecto   = (unHeroe:Heroe, unItem:Item) => unHeroe.pelearContraMonstruo
 
-
-  val forzar_Condicion = (unHeroe :Heroe) => !unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)
-  //val forzar_Facilidad = (unEquipo:Equipo) => unEquipo.mejorHeroeSegun().atributos().inteligencia + unEquipo.heroes.filter(_.trabajaDe(Ladron)).size *10
-  val forzar_Efecto    = (unHeroe:Heroe, unItem:Item) => unHeroe.forzarPuerta()
-
-  val robar_Condicion = (unHeroe :Heroe) => true
-  //val robar_Facilidad = (unEquipo:Equipo) =>  if (unEquipo.obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
-  val robar_Efecto    = (unHeroe:Heroe, unItem:Item) =>  unHeroe.robarTalisman(unItem)
+  val pelear_Efecto = (unHeroe:Heroe, unItem:Item) => if (unHeroe.atributos().fuerza<20) unHeroe.pelearContraMonstruo else unHeroe
+  val forzar_Efecto = (unHeroe:Heroe, unItem:Item) => if(!unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)) unHeroe.forzarPuerta() else unHeroe
+  val robar_Efecto  = (unHeroe:Heroe, unItem:Item) =>  unHeroe.robarTalisman(unItem)
 
   var unLadron:Heroe = _
   var unGuerrero:Heroe = _
@@ -55,9 +50,13 @@ class MisionTest {
 
     losSinTrabajo = new Equipo("Los Sin Trabajo", List(unSinTrabajo),100)
 
-    tarea_Pelear = new Tarea("Pelear",pelear_Condicion,pelear_Facilidad,condicion_facilidad_Pelear ,pelear_Efecto)
-    //tarea_Forzar = new Tarea("Pelear",forzar_Condicion,forzar_Facilidad,condicion_facilidad_Forzar, forzar_Efecto)
-    //tarea_Robar = new Tarea("Pelear",robar_Condicion,robar_Facilidad,condicion_facilidad_Robar, robar_Efecto)
+    val facilidadDePelear = new Facilidad(condicion_facilidad_Pelear,facilidad_Valor_Pelear)
+    val facilidadDeRobar = new Facilidad(condicion_facilidad_Robar,facilidad_Valor_Forzar)
+    val facilidadDeForzar = new Facilidad(condicion_facilidad_Forzar,facilidad_Valor_Robar)
+
+    tarea_Pelear= new Tarea("Pelear",pelear_Efecto,facilidadDePelear,cascoVikingo)
+    tarea_Forzar= new Tarea("Pelear",forzar_Efecto,facilidadDeForzar,cascoVikingo)
+    tarea_Robar = new Tarea("Pelear",robar_Efecto,facilidadDeRobar,cascoVikingo)
 
     misionPelear = new Mision(List(tarea_Pelear),100)
 
@@ -68,14 +67,13 @@ class MisionTest {
   //Desc: "reduce la vida de cualquier héroe con fuerza <20"
   @Test
   def pelearContraMonstruo_un_Guerrero(): Unit = {  //(10,15,0,-10)
-    assertEquals(misionPelear.realizar_Mision(unGuerrero,cascoVikingo)._1.atributos().hp,45)
-    //assertEquals(misionPelear.realizar_Mision(unGuerrero,cascoVikingo)._2,true)
+    assertEquals(misionPelear.realizar_Mision(losSinTrabajo),45)
   }
-
-  @Test
-  def pelearContraMonstruo_un_Debil(): Unit = {
-    assertEquals(misionPelear.realizar_Mision(un_debil,cascoVikingo)._1.atributos().hp,1)
-    //assertEquals(misionPelear.realizar_Mision(un_debil,cascoVikingo)._2,false)
-  }
+//
+//  @Test
+//  def pelearContraMonstruo_un_Debil(): Unit = {
+//    assertEquals(misionPelear.realizar_Mision(un_debil,cascoVikingo)._1.atributos().hp,1)
+//    //assertEquals(misionPelear.realizar_Mision(un_debil,cascoVikingo)._2,false)
+//  }
 
 }

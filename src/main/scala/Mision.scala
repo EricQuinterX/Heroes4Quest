@@ -1,21 +1,16 @@
 
-class Mision (tareas: List[Tarea], recompensa: Int){
+case class Mision (tareas: List[Tarea], recompensa: Int){
 
-  def condicionTareas(unHeroe: Option[Heroe]): Boolean =  tareas.forall((t:Tarea)=> t.condicionTarea(unHeroe))
-  def realizarTareas(unHeroe: Option[Heroe]): Option[Heroe] =  tareas.foldLeft(unHeroe){(res:Option[Heroe], t:Tarea)=>t.realizarTarea(res)}
+  def realizar_Mision(unEquipo: Equipo): (Equipo,Boolean) ={
 
-  //def superaFacilidad(unEquipo:Equipo) =>
+    if (tareas.exists{(t:Tarea)=> t.facilidad.condicion_facilidad(unEquipo)}){
+      val heroeConMayorFacilidad = unEquipo.mayorFacilidad_De_Realizar(tareas)
 
-  def realizar_Mision(unEquipo: Equipo,unaTarea: Tarea): (Equipo,Boolean) ={
+      val  heroeDespuesDeAplicarTareas= tareas.foldLeft(heroeConMayorFacilidad){(res:Heroe, t:Tarea)=>t.realizarTarea(heroeConMayorFacilidad)}
 
-    if (tareas.exists{(t:Tarea)=> t.condicion_Facilidad(unEquipo)}){
-      val unHeroe:Option[Heroe] = unEquipo.mayorFacilidad_De_Realizar(unaTarea)
-
-      if (condicionTareas(unHeroe)){
-        (realizarTareas(unHeroe),true)
+      unEquipo.reemplazarMiembro(heroeDespuesDeAplicarTareas,heroeConMayorFacilidad)
+      (unEquipo,true)
     }else(unEquipo,false)
-
-  }
 
   }
 

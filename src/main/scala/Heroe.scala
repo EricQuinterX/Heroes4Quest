@@ -48,5 +48,8 @@ case class Heroe (stats: Stats, trabajo: Option[Trabajo] = None, inventario: Inv
   def forzarPuerta         () : Heroe = copy(stats = stats.setear(stats.copy(hp = stats.hp-5,fuerza = stats.fuerza+1,velocidad = stats.velocidad,inteligencia = stats.inteligencia)))
   def robarTalisman  (i:Item) : Heroe = this.equiparseItem(i)
 
+  def esMejorPara(unaTarea:Tarea,unEquipo:Equipo): Int = unaTarea.facilidad.valorDe_Facilidad(this,unEquipo)
+
+
 }
 

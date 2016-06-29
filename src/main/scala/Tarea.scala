@@ -1,12 +1,14 @@
-
-class Tarea (name: String, condicion: (Option[Heroe] => Boolean), facilidad: ((Equipo) => Int), condicion_facilidad:(Equipo)=> Boolean, efecto: ((Option[Heroe], Item) => Option[Heroe]),unItem: Item){
-
-  def realizarTarea(unHeroe: Option[Heroe]):Option[Heroe] = efecto(unHeroe,unItem)
-
-  def condicionTarea(unHeroe:Option[Heroe]):Boolean = condicion (unHeroe)
+case class Facilidad(condicion_facilidad:(Equipo)=> Boolean, valor: ((Heroe,Equipo) => Int)){
 
   def condicion_Facilidad(unEquipo:Equipo): Boolean = condicion_facilidad(unEquipo)
+  def valorDe_Facilidad(unHeroe:Heroe,unEquipo:Equipo)= valor(unHeroe,unEquipo)
 
+}
+
+
+case class Tarea (name: String, efecto:((Heroe, Item) => Heroe),facilidad:Facilidad, unItem:Item){
+
+  def realizarTarea(unHeroe:Heroe):Heroe = efecto(unHeroe,unItem)
 
 
 }
