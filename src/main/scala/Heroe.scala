@@ -25,15 +25,8 @@ case class Heroe (stats: Stats,
   def dejarTrabajo() = copy(trabajo = None)
   def adquirirTrabajo(unTrabajo: Trabajo) = copy(trabajo = Some(unTrabajo))
 
-
   //Funciones para los items:2
   def equiparseItem(item: Item) = if (item.validarCondicion(this)) copy(inventario = inventario.meter(item)) else this
   def descartarItem(item: Item) = copy(inventario = inventario.sacar(item))
-
-  //funciona para las Tareas:3
-  def pelearContraMonstruo() : Heroe = copy(stats = stats.copy(hp = 1))
-  def forzarPuerta() : Heroe = copy(stats = stats.setear(stats.copy(hp = stats.hp-5,fuerza = stats.fuerza+1)))
-  def robarTalisman(i:Item) : Heroe = equiparseItem(i)
-
 }
 

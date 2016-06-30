@@ -1,15 +1,7 @@
 import scala.util.Try
 
-//case object EquipoVacioException extends Exception
-//case object NoHacerNingunaMisionException extends Exception
-
-//trait ResultadoEntrenamiento
-//case class EntrenamientoFallido(t: Tarea) extends ResultadoEntrenamiento
-//case class EntrenamientoSuperado(e: Equipo) extends ResultadoEntrenamiento
-
 case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider: Option[Heroe] = None) {
 
-//  Punto 2:5
   def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = Try(Some(heroes.maxBy(f(_)))) getOrElse None
 
   def obtieneItem(item: Item): Equipo = {
@@ -23,8 +15,10 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider:
       reemplazarMiembro(elegido,candidato.get)
     }
     else
-      copy(pozoDeOro = pozoDeOro + item.precio)
+      vender(item)
   }
+
+  def vender(unItem: Item) = copy(pozoDeOro = pozoDeOro + unItem.precio)
 
   def obtieneMiembro(unHeroe: Heroe) = copy(heroes = unHeroe :: heroes)
 
@@ -46,21 +40,4 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider:
 
     }
   }
-
-
-  //Punto 3
-  def facilidadPelearContraMonstruo():      Int = if (obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
-  def facilidadForzarPuerta(unHeroe:Heroe): Int = unHeroe.atributos().inteligencia + heroes.count(_.trabajaDe(Ladron)) *10
-  def facilidadRobarTalisman(unHeroe:Heroe):Int = if (obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
-
-
-  //Aqui rompe, lo que hay que hacer es preguntar por cada tarea que heroe tiene mayor facilidad
-  // luego devolverlo
-//  def mayorFacilidad_De_Realizar(tareas: List[Tarea]):Heroe= {
-//    val listaNumeros = heroes.map(_.esMejorPara(tareas.head, this))
-//
-//    val zorro = new Heroe(new Stats(25,25,25,25),Some(Ladron))
-//    zorro
-//  }
-
 }

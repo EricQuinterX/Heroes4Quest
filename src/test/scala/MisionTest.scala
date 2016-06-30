@@ -4,18 +4,22 @@ import org.junit.{Before, Test}
 class MisionTest {
 
   //Punto 3
-  val condicion_facilidad_Pelear = (unEquipo:Equipo)=> true
-  val condicion_facilidad_Forzar = (unEquipo:Equipo) =>true
-  val condicion_facilidad_Robar  = (unEquipo:Equipo) =>unEquipo.obtenerLider().lider.get.trabajaDe(Ladron)
+  val condicion_facilidad_Pelear = (e: Equipo)=> true
+  val condicion_facilidad_Forzar = (e: Equipo) => true
+  val condicion_facilidad_Robar  = (e: Equipo) => e.obtenerLider().lider.get.trabajaDe(Ladron)
 
-  val facilidad_Valor_Pelear = (unHeroe:Heroe,unEquipo:Equipo) =>   if (unEquipo.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
-  val facilidad_Valor_Forzar= (unHeroe:Heroe,unEquipo:Equipo) => unHeroe.atributos().inteligencia + unEquipo.heroes.count(_.trabajaDe(Ladron)) *10
-  val facilidad_Valor_Robar = (unHeroe:Heroe,unEquipo:Equipo) =>  if (unEquipo.obtenerLider().lider.get.trabajaDe(Ladron)) unHeroe.atributos().velocidad else -1
+  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
+  val facilidad_Valor_Forzar= (h: Heroe, e: Equipo) => h.atributos().inteligencia + e.heroes.count(_.trabajaDe(Ladron)) *10
+  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.obtenerLider().lider.get.trabajaDe(Ladron)) h.atributos().velocidad else -1
 
 
-  val pelear_Efecto = (unHeroe:Heroe, unItem:Item) => if (unHeroe.atributos().fuerza<20) unHeroe.pelearContraMonstruo() else unHeroe
-  val forzar_Efecto = (unHeroe:Heroe, unItem:Item) => if(!unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)) unHeroe.forzarPuerta() else unHeroe
-  val robar_Efecto  = (unHeroe:Heroe, unItem:Item) =>  unHeroe.robarTalisman(unItem)
+  val pelear_Efecto = (h: Heroe, i: Item) => if (h.atributos().fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
+  val forzar_Efecto = (h: Heroe, i: Item) => {
+    if(!h.trabajaDe(Mago) && !h.trabajaDe(Ladron))
+      h.copy(stats = h.stats.setear(h.stats.copy(hp = h.stats.hp-5,fuerza = h.stats.fuerza+1)))
+    else h
+  }
+  val robar_Efecto  = (h: Heroe, i: Item) => h.equiparseItem(i)
 
   var unLadron:Heroe = _
   var unGuerrero:Heroe = _
@@ -49,10 +53,10 @@ class MisionTest {
     un_debil = new Heroe(new Stats(10,10,10,10))
 
     losSinTrabajo = new Equipo("Los Sin Trabajo", List(unSinTrabajo),100)
-
-    val facilidadDePelear = new Facilidad(condicion_facilidad_Pelear,facilidad_Valor_Pelear)
-    val facilidadDeRobar = new Facilidad(condicion_facilidad_Robar,facilidad_Valor_Forzar)
-    val facilidadDeForzar = new Facilidad(condicion_facilidad_Forzar,facilidad_Valor_Robar)
+//
+//    val facilidadDePelear = new Facilidad(condicion_facilidad_Pelear,facilidad_Valor_Pelear)
+//    val facilidadDeRobar = new Facilidad(condicion_facilidad_Robar,facilidad_Valor_Forzar)
+//    val facilidadDeForzar = new Facilidad(condicion_facilidad_Forzar,facilidad_Valor_Robar)
 
 //    tarea_Pelear= new Tarea("Pelear",pelear_Efecto,facilidadDePelear,cascoVikingo)
 //    tarea_Forzar= new Tarea("Pelear",forzar_Efecto,facilidadDeForzar,cascoVikingo)

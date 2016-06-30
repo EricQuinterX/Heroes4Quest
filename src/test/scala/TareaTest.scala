@@ -3,24 +3,30 @@ import org.junit.{Before, Test}
 
 class TareaTest {
 
-  val pelearContraMonstruo = (unHeroe:Heroe) => if (unHeroe.atributos().fuerza<20) unHeroe.pelearContraMonstruo() else unHeroe
-  val facilidadPelearContraMonstruo= (unEquipo:Equipo) =>  unEquipo.facilidadPelearContraMonstruo()
+  val pelearContraMonstruo = (h: Heroe) => if (h.atributos().fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
+  val facilidadPelearContraMonstruo= (e: Equipo) => if (e.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
 
+  val forzarPuerta = (h :Heroe) => {
+    if (!h.trabajaDe(Mago) && !h.trabajaDe(Ladron))
+      h.copy(stats = h.stats.setear(h.stats.copy(hp = h.stats.hp-5,fuerza = h.stats.fuerza+1)))
+    else h
+  }
+  val facilidadForzarPuerta = (h: Heroe, e: Equipo) => h.atributos().inteligencia + e.heroes.count(_.trabajaDe(Ladron))*10
 
-  val forzarPuerta = (unHeroe :Heroe) => if (!unHeroe.trabajaDe(Mago) && !unHeroe.trabajaDe(Ladron)) unHeroe.forzarPuerta() else unHeroe
-  val facilidadForzarPuerta = (unHeroe:Heroe,unEquipo:Equipo) =>  unEquipo.facilidadForzarPuerta(unHeroe)
-
-  val robarTalisman = (unHeroe:Heroe, unItem:Item) =>  unHeroe.robarTalisman(unItem)
-  val facilidadRobarTalisman = (unHeroe:Heroe,unEquipo:Equipo) =>  unEquipo.facilidadRobarTalisman(unHeroe)
+  val robarTalisman = (unHeroe:Heroe, unItem:Item) =>  unHeroe.equiparseItem(unItem)
+  val facilidadRobarTalisman = (h: Heroe, e: Equipo) => if (e.obtenerLider().lider.get.trabajaDe(Ladron)) h.atributos().velocidad else -1
 
   val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
-  val facilidad_tareaDificil = (h: Heroe) => h.atributos().principal(h.trabajo)
+  val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos().principal(h.trabajo)
   val efecto_tareaDificl = (h: Heroe, e: Equipo) => {
     val s = h.stats
     val h1 = h.copy(stats = s.copy(hp = s.hp + 10))
-    val newTeam = e.reemplazarMiembro(h1, h)
-    (h1, newTeam)
+    e.reemplazarMiembro(h1, h)
   }
+
+  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider().lider.get.atributos().velocidad > 50
+  val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.heroes.maxBy(_.atributos().hp).stats.velocidad
+  val efecto_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.copy(pozoDeOro = e.pozoDeOro + 9999999)
 
   var equipoVacio  :Equipo = _
   var losSinTrabajo:Equipo = _
@@ -82,7 +88,7 @@ class TareaTest {
 
 
     tareaDificil = new Tarea("Tarea Dificil",condicion_tareaDificil,facilidad_tareaDificil,efecto_tareaDificl)
-
+    elRegresoDeBroly = new Tarea("El Regreso de Broly", condicion_elRegresoDeBroly, facilidad_elRegresoDeBroly, efecto_elRegresoDeBroly)
   }
 
   //Test para probar de la tarea el pelear contra un mounstruo: 4
@@ -216,8 +222,14 @@ class TareaTest {
   @Test
   def realizarTareaDificil(): Unit = {
     val tareaRealizada = tareaDificil.realizarTarea(losVeganos)
-    assertEquals(tareaRealizada.resultado, TareaSuperada)
-    assertEquals(tareaRealizada.equipo.get.obtenerLider().lider, 109)
+    assertEquals(tareaRealizada.resultado, TareaSuperada) // +10hp por tarea superada
+    assertEquals(tareaRealizada.equipo.get.obtenerLider().lider.get.stats.hp, 50)
+  }
+
+  @Test
+  def realizarElRegresoDeBroly(): Unit = {
+    val tareaRealizada = elRegresoDeBroly.realizarTarea(losMagicos)
+    assertEquals(tareaRealizada.resultado, TareaFallida)
   }
 
 }
