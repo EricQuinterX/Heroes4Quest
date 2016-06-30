@@ -266,8 +266,8 @@ class ItemsTest {
     val jonny2=jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
     val jonny3=jonny2.equiparseItem(palitoMagico)// (0,0,0,20)
     val jonny4=jonny3.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
-    assertEquals(jonny4.atributos().hp,12)
-    assertEquals(jonny4.atributos().inteligencia,52)
+    assertEquals(jonny4.atributos().hp,15)
+    assertEquals(jonny4.atributos().inteligencia,55)
   }
 
 

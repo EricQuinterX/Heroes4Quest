@@ -23,22 +23,4 @@ case class Mision (tareas: List[Tarea],
     else
       copy(equipo = ultimaTareaFinalizada.equipo, resultado = MisionFallida, tareaFallida = Some(ultimaTareaFinalizada))
   }
-
-
-
-
-//  def realizar_Mision(unEquipo: Equipo): (Equipo,Boolean) ={
-//    /*aca valida si existe alguna tarea capaz de realizar el equipo, pero el enunciado dice que si una tarea
-//      no se puede realizar la mision se considera fallida*/
-//    if (tareas.exists{(t:Tarea)=> t.facilidad.condicion_facilidad(unEquipo)}){
-//      val heroeConMayorFacilidad = unEquipo.mayorFacilidad_De_Realizar(tareas)
-//
-//      val  heroeDespuesDeAplicarTareas= tareas.foldLeft(heroeConMayorFacilidad){(res:Heroe, t:Tarea)=>t.realizarTarea(heroeConMayorFacilidad)}
-//
-//      unEquipo.reemplazarMiembro(heroeDespuesDeAplicarTareas,heroeConMayorFacilidad)
-//      (unEquipo,true)
-//    }else(unEquipo,false)
-//
-//  }
-
 }

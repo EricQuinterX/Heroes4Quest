@@ -11,10 +11,6 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider:
 
 //  Punto 2:5
   def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = Try(Some(heroes.maxBy(f(_)))) getOrElse None
-//  heroes match {
-//    case Nil => None
-//    case _ => Some(heroes.maxBy(f(_)))
-//  }
 
   def obtieneItem(item: Item): Equipo = {
     val candidato = heroes.foldLeft(heroes.headOption) { (resultado, unHeroe) =>

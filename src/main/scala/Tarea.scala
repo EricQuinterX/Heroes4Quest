@@ -29,19 +29,6 @@ case class Tarea (name: String,
       copy(equipo = newTeam, resultado = TareaSuperada)
     } getOrElse copy(equipo = Some(unEquipo), resultado = TareaFallida)
   }
-
-  /* Eric: Como era case Tarea y misiones, cree unos atributos para que las clases sean inmutables,
-      no necesito devolver un Equipo solo*/
-//  def aplicarEfecto(mejorHeroe: Heroe, unEquipo: Equipo): Equipo = {
-//    val nuevoHeroe = efecto(mejorHeroe)
-//    unEquipo.reemplazarMiembro(nuevoHeroe, mejorHeroe)
-//  }
-
-    /* Eric: No necesariamente el efecto debe ser entregar un item, puede dar stats, oro u otro personaje,
-       eso depende de la funcion efecto*/
-//  def realizarTarea(unHeroe:Heroe):Heroe = efecto(unHeroe,unItem)
-
-
 }
 
 

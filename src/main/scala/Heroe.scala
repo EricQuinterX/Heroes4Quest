@@ -1,5 +1,3 @@
-import scala.util.Try
-
 //Posiciones de un heroe
 abstract class Posicion
 case object Cabeza extends Posicion
@@ -32,20 +30,10 @@ case class Heroe (stats: Stats,
   def equiparseItem(item: Item) = if (item.validarCondicion(this)) copy(inventario = inventario.meter(item)) else this
   def descartarItem(item: Item) = copy(inventario = inventario.sacar(item))
 
-
-  //Funciones para los equipos:2
-//  def unirseAEquipo(e: Equipo) = copy(equipo = Some(e))
-//  def dejarEquipo() = copy(equipo = None)
-
-
   //funciona para las Tareas:3
-  def pelearContraMonstruo () : Heroe = copy(stats = stats.copy(hp = 1))
-  def forzarPuerta         () : Heroe = copy(stats = stats.setear(stats.copy(hp = stats.hp-5,fuerza = stats.fuerza+1)))
-  def robarTalisman  (i:Item) : Heroe = equiparseItem(i)
-
-// Eric: No entendi muy bien para que el esMejorPara? las tareas se tienen que ejecutar todas o sino se concidera fallida
-//  def esMejorPara(unaTarea:Tarea,unEquipo:Equipo): Int = unaTarea.facilidad.valorDe_Facilidad(this,unEquipo)
-
+  def pelearContraMonstruo() : Heroe = copy(stats = stats.copy(hp = 1))
+  def forzarPuerta() : Heroe = copy(stats = stats.setear(stats.copy(hp = stats.hp-5,fuerza = stats.fuerza+1)))
+  def robarTalisman(i:Item) : Heroe = equiparseItem(i)
 
 }
 
