@@ -15,7 +15,7 @@ case class Mision (tareas: List[Tarea],
     val ultimaTareaFinalizada = tareas.tail.foldLeft(tareas.head.realizarTarea(unEquipo)) { (t1,t2) =>
       t1 match {
         case Tarea(_,_,_,_,Some(teamS), TareaSuperada) => t2.realizarTarea(teamS)
-        case Tarea(_,_,_,_,Some(teamF), f @ TareaFallida) => t2.copy(resultado = f).realizarTarea(teamF)
+        case x => x
       }
     }
     if (ultimaTareaFinalizada.resultado == TareaSuperada)

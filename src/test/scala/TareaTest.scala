@@ -25,8 +25,12 @@ class TareaTest {
   }
 
   val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider().lider.get.atributos().velocidad > 50
-  val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.heroes.maxBy(_.atributos().hp).stats.velocidad
-  val efecto_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.copy(pozoDeOro = e.pozoDeOro + 9999999)
+  val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => h.stats.velocidad
+  val efecto_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.copy(pozoDeOro = e.pozoDeOro + 100)
+
+  val condicion_tanque = (e: Equipo) => e.heroes.size >= 2
+  val facilidad_tanque = (h: Heroe, e: Equipo) => h.stats.hp
+  val efecto_tanque = (h: Heroe, e: Equipo) => e.copy(pozoDeOro = e.pozoDeOro + 100)
 
   var equipoVacio  :Equipo = _
   var losSinTrabajo:Equipo = _
@@ -61,6 +65,7 @@ class TareaTest {
 
   var tareaDificil: Tarea = _
   var elRegresoDeBroly: Tarea = _
+  var tanque: Tarea = _
 
 
   @Before
@@ -71,7 +76,7 @@ class TareaTest {
     unSinTrabajo = new Heroe(new Stats(25,25,25,25))
     unoDe_Treinta_Cinco = new Heroe(new Stats(35,35,35,35))
     un_debil = new Heroe(new Stats(1,1,1,1))
-    brocoli = new Heroe(Stats(40,19,48,99))
+    brocoli = new Heroe(Stats(40,19,58,99))
     peregil = new Heroe(Stats(60,55,62,94))
     repollo = new Heroe(Stats(60,95,30,10))
 
@@ -83,12 +88,11 @@ class TareaTest {
     losGuerreros = new Equipo("Las Magicos", List(un_debil, unGuerrero),100)
     losVeganos = new Equipo("Los Veganos",List(repollo,peregil,brocoli))
 
-
     cascoVikingo = new Item("Casco Vikingo", 200, Cabeza, efecto_cascoVikingo, condicion_cascoVikingo)
-
 
     tareaDificil = new Tarea("Tarea Dificil",condicion_tareaDificil,facilidad_tareaDificil,efecto_tareaDificl)
     elRegresoDeBroly = new Tarea("El Regreso de Broly", condicion_elRegresoDeBroly, facilidad_elRegresoDeBroly, efecto_elRegresoDeBroly)
+    tanque = new Tarea("Tanque", condicion_tanque, facilidad_tanque, efecto_tanque)
   }
 
   //Test para probar de la tarea el pelear contra un mounstruo: 4
@@ -228,8 +232,13 @@ class TareaTest {
 
   @Test
   def realizarElRegresoDeBroly(): Unit = {
-    val tareaRealizada = elRegresoDeBroly.realizarTarea(losMagicos)
-    assertEquals(tareaRealizada.resultado, TareaFallida)
+    val tareaRealizada = elRegresoDeBroly.realizarTarea(losVeganos)
+    assertEquals(tareaRealizada.resultado, TareaSuperada)
+  }
+
+  def realizarTanque(): Unit = {
+    val tareaRealizada = tanque.realizarTarea(losVeganos)
+    assertEquals(tareaRealizada.equipo.get.pozoDeOro, 100)
   }
 
 }
