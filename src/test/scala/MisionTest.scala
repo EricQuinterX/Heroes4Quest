@@ -132,4 +132,50 @@ class MisionTest {
     assertEquals(mision.equipo.get.pozoDeOro, 0)
   }
 
+  @Test
+  def realizarMision_VerificarCambiosInmediatosEnCadaTarea(): Unit ={
+    val mision = mision_ZombiePlant.realizarMision(losVeganos)
+    val equipo0 = mision.tareas.lift(0).get.realizarTarea(losVeganos).equipo.get //le da +10 de hp a brocoli
+    assertEquals(equipo0.heroes.lift(0).get.stats, new Stats(50,19,58,99)) //brocoli = new Heroe(Stats(40,19,58,99)) es el 0 porque es el heroe que se modifico
+    val equipo1 = mision.tareas.lift(1).get.realizarTarea(equipo0).equipo.get //le da +100 de oro al equipo
+    assertEquals(equipo1.pozoDeOro, 100)
+    assertEquals(equipo1.heroes.lift(0).get.stats, new Stats(50,19,58,99)) //Verifico nuevamente a brocoli para ver sus cambios hechos en la primera tarea
+  }
+
+  @Test
+  def realizarMision_VerificarMisionFallidaPorPasos(): Unit ={
+    val mision = mision_ZombiePlant.realizarMision(losVeganos)
+    val equipo0 = mision.tareas.lift(0).get.realizarTarea(losVeganos).equipo.get //le da +10 de hp a brocoli
+    assertEquals(equipo0.heroes.lift(0).get.stats, new Stats(50,19,58,99)) //brocoli = new Heroe(Stats(40,19,58,99)) es el 0 porque es el heroe que se modifico
+    val equipo1 = mision.tareas.lift(1).get.realizarTarea(equipo0).equipo.get //le da +100 de oro al equipo
+    assertEquals(equipo1.pozoDeOro, 100)
+
+    val mision2 = mision_MisionImposible.realizarMision(equipo1)
+    val equipo2 = mision2.tareas.lift(0).get.realizarTarea(equipo1).equipo.get
+    assertEquals(equipo2.heroes.head.stats, new Stats(10,10,10,10)) //el header es el heroe modificado en este caso repollo
+    val tareafallida = mision2.tareas.lift(1).get.realizarTarea(equipo2) //Nadie tiene fuerza > 100 asi que esta tarea no se podra realizar
+    assertEquals(tareafallida.resultado, TareaFallida)
+    assertEquals(tareafallida.equipo.get.heroes,List(Heroe(Stats(10,10,10,10),None,Inventario(List()),None), Heroe(Stats(50,19,58,99),None,Inventario(List()),None), Heroe(Stats(60,55,62,94),None,Inventario(List()),None))) //Devuelve el ultimo equipo valido, pero tendria que devolver el equipo1 original
+  }
+
+  @Test
+  def realizarMision_VerificarMisionFallida(): Unit ={
+    val mision = mision_ZombiePlant.realizarMision(losVeganos)
+    val equipo0 = mision.tareas.lift(0).get.realizarTarea(losVeganos).equipo.get //le da +10 de hp a brocoli
+    assertEquals(equipo0.heroes.lift(0).get.stats, new Stats(50,19,58,99)) //brocoli = new Heroe(Stats(40,19,58,99)) es el 0 porque es el heroe que se modifico
+    val equipo1 = mision.tareas.lift(1).get.realizarTarea(equipo0).equipo.get //le da +100 de oro al equipo
+    assertEquals(equipo1.pozoDeOro, 100)
+    //aplico mision2 de una sola pasada
+    val mision2 = mision_MisionImposible.realizarMision(equipo1)
+    assertEquals(mision2.tareaFallida.get.name, tarea_nivel2.name) //Devuelve la tarea fallida correctamente
+    assertEquals(mision2.equipo.get.heroes,equipo1.heroes) //Aca tendria que devolverme al equipo1 original sin embargo me devuelve el ultimo estado valido (tarea 0 hecha de mision2)
+
+  }
+  @Test
+  def realizarMision_VerificarMisionExitosa(): Unit ={
+    val mision = mision_ZombiePlant.realizarMision(losVeganos)
+    assertEquals(mision.resultado, MisionSuperada)
+    assertEquals(mision.equipo.get,
+      new Equipo("Los Veganos",List(Heroe(Stats(50,19,58,99),None,Inventario(List()),None), Heroe(Stats(60,95,30,10),None,Inventario(List()),None), Heroe(Stats(60,55,62,94),None,Inventario(List()),None)),1200,None)) //Vemos que los efectos son los correctos
+  }
 }

@@ -23,4 +23,5 @@ case class Mision (tareas: List[Tarea],
     else
       copy(equipo = ultimaTareaFinalizada.equipo, resultado = MisionFallida, tareaFallida = Some(ultimaTareaFinalizada))
   }
+
 }
