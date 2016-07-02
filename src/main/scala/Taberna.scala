@@ -1,4 +1,6 @@
-class Taberna (misiones: List[Mision]) {
+import scala.util.Try
+
+case class Taberna (misiones: List[Mision]) {
 
   def elegirMision(e: Equipo, criterio: (Equipo,Equipo)=>Boolean): Option[Mision] = {
     val misionCandidata = misiones.foldLeft(misiones.head){(m1,m2) =>
@@ -9,15 +11,16 @@ class Taberna (misiones: List[Mision]) {
 //      else
       if (criterio(e1,e2)) m1 else m2
     }
-    if (misionCandidata.equipo.get == e) None
+    if (misionCandidata.realizarMision(e).equipo.getOrElse() == e) None
     else Some(misionCandidata)
   }
 
-  def entrenar(e: Equipo, criterio: (Equipo,Equipo)=>Boolean, tablonReducido: List[Mision] = misiones): Equipo = {
-    if (tablonReducido.isEmpty) return e
-    val mejorMision = elegirMision(e, criterio)
-    val tablon = tablonReducido.filter(_ != mejorMision)
-    val misionHecha = mejorMision.get.realizarMision(e)
-    entrenar(misionHecha.equipo.get,criterio,tablon)
+  def entrenar(e: Equipo, criterio: (Equipo,Equipo)=>Boolean): Equipo = {
+    Try {
+      val mejorMision = elegirMision(e, criterio).get
+      val nuevaTaberna = copy(misiones = misiones.filter(_ != mejorMision))
+      val misionHecha = mejorMision.realizarMision(e)
+      nuevaTaberna.entrenar(misionHecha.equipo.get,criterio)
+    } getOrElse e
   }
 }

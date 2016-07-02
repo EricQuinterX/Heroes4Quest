@@ -37,7 +37,6 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider:
       val att_principal = posibleLider.atributos.principal(posibleLider.trabajo)
       val otraLista = heroes.filter(x => x.atributos.principal(x.trabajo) == att_principal)
       if (otraLista.size == 1) copy(lider = Some(posibleLider)) else copy(lider = None)
-
     }
   }
 }
