@@ -21,7 +21,7 @@ case class Mision (tareas: List[Tarea],
     if (ultimaTareaFinalizada.resultado == TareaSuperada)
       copy(equipo = Some(recompensa(ultimaTareaFinalizada.equipo.get)), resultado = MisionSuperada)
     else
-      copy(equipo = ultimaTareaFinalizada.equipo, resultado = MisionFallida, tareaFallida = Some(ultimaTareaFinalizada))
+      copy(equipo = Some(unEquipo), resultado = MisionFallida, tareaFallida = Some(ultimaTareaFinalizada))
   }
 
 }
