@@ -1,5 +1,3 @@
-import scala.collection.immutable.Queue
-
 //  Items
 case class Item(name: String, precio: Int, parte: Posicion, efecto: (Heroe => Stats), condicion: (Heroe => Boolean)){
 
@@ -10,7 +8,7 @@ case class Item(name: String, precio: Int, parte: Posicion, efecto: (Heroe => St
       parte == Cuello ||
       (if (parte == Mano(1) && otroItem.parte == Mano(2)) parte != Mano(1)
       else if (parte==Mano(2) && otroItem.parte == Mano(1)) parte != Mano(2)
-      else true)
+      else false)
   }
 }
 

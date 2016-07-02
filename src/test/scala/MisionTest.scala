@@ -7,28 +7,28 @@ class MisionTest {
   //Punto 3
   val condicion_facilidad_Pelear = (e: Equipo)=> true
   val condicion_facilidad_Forzar = (e: Equipo) => true
-  val condicion_facilidad_Robar  = (e: Equipo) => e.obtenerLider().lider.get.trabajaDe(Ladron)
+  val condicion_facilidad_Robar  = (e: Equipo) => e.obtenerLider.lider.get.trabajaDe(Ladron)
   val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
-  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider().lider.get.atributos().velocidad > 50
+  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider.lider.get.atributos.velocidad > 50
   val condicion_tanque = (e: Equipo) => e.heroes.size >= 2
   val condicion_nivel1 = (e: Equipo) => e.heroes.exists(_.stats.hp > 20)
-  val condicion_nivel2 = (e: Equipo) => e.heroes.exists(_.atributos().fuerza > 100)
+  val condicion_nivel2 = (e: Equipo) => e.heroes.exists(_.atributos.fuerza > 100)
   val condicion_nivel3 = (e: Equipo) => e.pozoDeOro > 200
 
 
-  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
-  val facilidad_Valor_Forzar= (h: Heroe, e: Equipo) => h.atributos().inteligencia + e.heroes.count(_.trabajaDe(Ladron)) *10
-  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.obtenerLider().lider.get.trabajaDe(Ladron)) h.atributos().velocidad else -1
-  val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos().principal(h.trabajo)
+  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Guerrero)) 20 else 10
+  val facilidad_Valor_Forzar= (h: Heroe, e: Equipo) => h.atributos.inteligencia + e.heroes.count(_.trabajaDe(Ladron)) *10
+  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.obtenerLider.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
+  val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos.principal(h.trabajo)
   val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => h.stats.velocidad
   val facilidad_tanque = (h: Heroe, e: Equipo) => h.stats.hp
   val facilidad_nivel1 = (h: Heroe, e: Equipo) => h.stats.fuerza
-  val facilidad_nivel2 = (h: Heroe, e: Equipo) => h.atributos().velocidad + h.atributos().inteligencia
+  val facilidad_nivel2 = (h: Heroe, e: Equipo) => h.atributos.velocidad + h.atributos.inteligencia
   val facilidad_nivel3 = (h: Heroe, e: Equipo) => h.stats.hp + h.stats.fuerza
 
 
 
-  val pelear_Efecto = (h: Heroe, i: Item) => if (h.atributos().fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
+  val pelear_Efecto = (h: Heroe, i: Item) => if (h.atributos.fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
   val forzar_Efecto = (h: Heroe, i: Item) => {
     if(!h.trabajaDe(Mago) && !h.trabajaDe(Ladron))
       h.copy(stats = h.stats.setear(h.stats.copy(hp = h.stats.hp-5,fuerza = h.stats.fuerza+1)))
@@ -120,8 +120,8 @@ class MisionTest {
     val mision = mision_ZombiePlant.realizarMision(losVeganos)
     assertEquals(mision.resultado, MisionSuperada)
     assertEquals(mision.equipo.get.pozoDeOro, 1200)
-    val lider = mision.equipo.get.obtenerLider().lider
-    assertEquals(Try(lider.get.atributos().hp) getOrElse 0, 50)
+    val lider = mision.equipo.get.obtenerLider.lider
+    assertEquals(Try(lider.get.atributos.hp) getOrElse 0, 50)
   }
 
   @Test

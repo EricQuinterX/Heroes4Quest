@@ -24,18 +24,18 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider:
 
   def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = copy(heroes= nuevoHeroe :: heroes.filter(_ != viejoHeroe))
 
-  def obtenerLider(): Equipo = {
+  def obtenerLider: Equipo = {
     if (heroes.isEmpty) {
       copy(lider = None)
     }
     else {
       val posibleLider = heroes.foldLeft(heroes.head) { (resultado, heroe) =>
-        if (resultado.atributos().principal(resultado.trabajo) > heroe.atributos().principal(heroe.trabajo))
+        if (resultado.atributos.principal(resultado.trabajo) > heroe.atributos.principal(heroe.trabajo))
           resultado
         else heroe
       }
-      val att_principal = posibleLider.atributos().principal(posibleLider.trabajo)
-      val otraLista = heroes.filter(x => x.atributos().principal(x.trabajo) == att_principal)
+      val att_principal = posibleLider.atributos.principal(posibleLider.trabajo)
+      val otraLista = heroes.filter(x => x.atributos.principal(x.trabajo) == att_principal)
       if (otraLista.size == 1) copy(lider = Some(posibleLider)) else copy(lider = None)
 
     }

@@ -96,10 +96,10 @@ class ItemsTest {
   def _equiparItem_Duplicados(): Unit = {
     val jonny = new Heroe(new Stats(50,50,50,50))
     val jonny2= jonny.equiparseItem(cascoVikingo)
-    val jonny3=jonny.equiparseItem(cascoVikingo)
-    val jonny4=jonny.equiparseItem(cascoVikingo)
+    val jonny3=jonny2.equiparseItem(cascoVikingo)
+    val jonny4=jonny3.equiparseItem(cascoVikingo)
     assertEquals(jonny4.inventario.cantidadItems, 1)
-    assertEquals(jonny4.atributos().hp,60)
+    assertEquals(jonny4.atributos.hp,60)
   }
 
   @Test
@@ -113,10 +113,10 @@ class ItemsTest {
   def _descartarItem_Que_Existe_en_el_Inventario(): Unit = {
     val jonny = new Heroe(new Stats(50,50,50,50))
     val jonny2=jonny.equiparseItem(cascoVikingo)
-    assertEquals(jonny2.atributos().hp,60)
+    assertEquals(jonny2.atributos.hp,60)
     val jonny3=jonny2.descartarItem(cascoVikingo)
     assertEquals(jonny3.inventario.cantidadItems, 0)
-    assertEquals(jonny3.atributos().hp,50)
+    assertEquals(jonny3.atributos.hp,50)
   }
 
 
@@ -126,14 +126,14 @@ class ItemsTest {
   def cascoVikingo_CumpleCondicion(): Unit = {
     val jonny = new Heroe(new Stats(50,50,50,50))
     val jonny2=jonny.equiparseItem(cascoVikingo)
-    assertEquals(jonny2.atributos().hp,60)
+    assertEquals(jonny2.atributos.hp,60)
     assertEquals(jonny2.stats, new Stats(50,50,50,50))
   }
   @Test
   def cascoVikingo_No_CumpleCondicion(): Unit = {
     val jonny = new Heroe(new Stats(10,5,50,50))
     val jonny2=jonny.equiparseItem(cascoVikingo)
-    assertEquals(jonny2.atributos().hp,10)
+    assertEquals(jonny2.atributos.hp,10)
     assertEquals(jonny2.inventario.cantidadItems, 0)
   }
 
@@ -142,7 +142,7 @@ class ItemsTest {
     val jonny = new Heroe(new Stats   (100,50,50,50))
     val jonny2=jonny.adquirirTrabajo(Guerrero) //(10,15,0,-10)
     val jonny3=jonny2.equiparseItem(cascoVikingo)//(10,0,0,0)
-    assertEquals(jonny3.atributos().hp,120)
+    assertEquals(jonny3.atributos.hp,120)
     assertEquals(jonny3.inventario.cantidadItems, 1)
   }
 
@@ -153,8 +153,8 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (50,50,50,50))
     val jonny2=jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
     val jonny3=jonny2.equiparseItem(palitoMagico)// (0,0,0,20)
-    assertEquals(jonny3.atributos().fuerza,30)
-    assertEquals(jonny3.atributos().inteligencia,90)
+    assertEquals(jonny3.atributos.fuerza,30)
+    assertEquals(jonny3.atributos.inteligencia,90)
     assertEquals(jonny3.stats, new Stats(50,50,50,50))
   }
 
@@ -163,9 +163,9 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (50,50,50,50))
     val jonny2=jonny.adquirirTrabajo(Ladron)     //(-5,0,10,0)
     val jonny3=jonny2.equiparseItem(palitoMagico)// (0,0,0,20)
-    assertEquals(jonny3.atributos().hp,45)
-    assertEquals(jonny3.atributos().inteligencia,70)
-    assertEquals(jonny3.atributos().velocidad,60)
+    assertEquals(jonny3.atributos.hp,45)
+    assertEquals(jonny3.atributos.inteligencia,70)
+    assertEquals(jonny3.atributos.velocidad,60)
   }
 
   @Test
@@ -173,7 +173,7 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (50,50,50,50))
     val jonny2=jonny.adquirirTrabajo(Guerrero)   //(10,15,0,-10)
     val jonny3=jonny2.equiparseItem(palitoMagico)// (0,0,0,20)
-    assertEquals(jonny3.atributos().inteligencia,40)
+    assertEquals(jonny3.atributos.inteligencia,40)
   }
 
   @Test
@@ -181,9 +181,9 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (50,50,50,20))
     val jonny2=jonny.adquirirTrabajo(Ladron)     //(-5,0,10,0)
     val jonny3=jonny2.equiparseItem(palitoMagico)// (0,0,0,20)
-    assertEquals(jonny3.atributos().hp,45)
-    assertEquals(jonny3.atributos().inteligencia,20)
-    assertEquals(jonny3.atributos().velocidad,60)
+    assertEquals(jonny3.atributos.hp,45)
+    assertEquals(jonny3.atributos.inteligencia,20)
+    assertEquals(jonny3.atributos.velocidad,60)
     assertEquals(jonny3.inventario.cantidadItems, 0)
   }
 
@@ -193,8 +193,8 @@ class ItemsTest {
   def armaduraElefanteSport_Equiarse_Hereo(): Unit = {
     val jonny = new Heroe(new Stats  (10,50,5,50))
     val jonny2=jonny.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
-    assertEquals(jonny2.atributos().velocidad,35)
-    assertEquals(jonny2.atributos().hp,1)
+    assertEquals(jonny2.atributos.velocidad,35)
+    assertEquals(jonny2.atributos.hp,1)
   }
 
   @Test
@@ -202,8 +202,8 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (50,50,5,50))
     val jonny2=jonny.adquirirTrabajo(Ladron)    //(-5,0,10,0)
     val jonny3=jonny2.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
-    assertEquals(jonny3.atributos().velocidad,45)
-    assertEquals(jonny3.atributos().hp,15)
+    assertEquals(jonny3.atributos.velocidad,45)
+    assertEquals(jonny3.atributos.hp,15)
   }
 
 
@@ -212,7 +212,7 @@ class ItemsTest {
   def arcoViejo_Equiarse_Hereo(): Unit = {
     val jonny = new Heroe(new Stats  (10,50,5,50))
     val jonny2=jonny.equiparseItem(arcoViejo)// (0,+2,0,0)
-    assertEquals(jonny2.atributos().fuerza,52)
+    assertEquals(jonny2.atributos.fuerza,52)
   }
 
 
@@ -221,7 +221,7 @@ class ItemsTest {
   def escudo_AntiRobo_CumpleCondicion(): Unit = {
     val jonny = new Heroe(new Stats  (10,50,5,50))
     val jonny2=jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
-    assertEquals(jonny2.atributos().hp,30)
+    assertEquals(jonny2.atributos.hp,30)
   }
 
   @Test
@@ -229,8 +229,8 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (10,50,5,50))
     val jonny2=jonny.adquirirTrabajo(Ladron)    //(-5,0,10,0)
     val jonny3=jonny2.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
-    assertEquals(jonny3.atributos().hp,5)
-    assertEquals(jonny3.atributos().velocidad,15)
+    assertEquals(jonny3.atributos.hp,5)
+    assertEquals(jonny3.atributos.velocidad,15)
   }
 
 
@@ -238,7 +238,7 @@ class ItemsTest {
   def escudo_AntiRobo_No_CumpleCondicion_Por_Debil(): Unit = {
     val jonny = new Heroe(new Stats  (10,10,5,50))
     val jonny2=jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
-    assertEquals(jonny2.atributos().hp,10)
+    assertEquals(jonny2.atributos.hp,10)
   }
 
 
@@ -247,7 +247,7 @@ class ItemsTest {
   def talismanDe_Dedicacion_Sin_Trabajo(): Unit = {
     val jonny = new Heroe(new Stats  (10,10,10,10))
     val jonny2=jonny.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
-    assertEquals(jonny2.atributos().hp,11)
+    assertEquals(jonny2.atributos.hp,11)
   }
 
 
@@ -255,9 +255,9 @@ class ItemsTest {
   def talismanDe_Dedicacion_Con_Trabajo_Mago(): Unit = {
     val jonny = new Heroe(new Stats  (10,10,10,10))
     val jonny2=jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
-    assertEquals(jonny2.atributos(),new Stats (10,1,10,30))
+    assertEquals(jonny2.atributos,new Stats (10,1,10,30))
     val jonny3=jonny2.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
-    assertEquals(jonny3.atributos().hp,13) //Falta arreglar esto
+    assertEquals(jonny3.atributos.hp,13) //Falta arreglar esto
   }
 
   @Test
@@ -266,8 +266,8 @@ class ItemsTest {
     val jonny2=jonny.adquirirTrabajo(Mago)     //(0,-20,0,20)
     val jonny3=jonny2.equiparseItem(palitoMagico)// (0,0,0,20)
     val jonny4=jonny3.equiparseItem(talismanDedicacion)// (*1.1,*1.1,*1.1,*1.1)
-    assertEquals(jonny4.atributos().hp,15)
-    assertEquals(jonny4.atributos().inteligencia,55)
+    assertEquals(jonny4.atributos.hp,15)
+    assertEquals(jonny4.atributos.inteligencia,55)
   }
 
 
@@ -276,7 +276,7 @@ class ItemsTest {
   def talismanDel_Minimalismo_SinItems_Equipados(): Unit = {
     val jonny = new Heroe(new Stats  (10,10,10,10))
     val jonny2=jonny.equiparseItem(talismanMinimalista)// (+50-10*inventario.size,0,0,0)
-    assertEquals(jonny2.atributos().hp,60)
+    assertEquals(jonny2.atributos.hp,60)
   }
 
   @Test
@@ -285,7 +285,7 @@ class ItemsTest {
     val jonny2=jonny.equiparseItem(escudoAntiRobo)// (+20,0,0,0)
     val jonny3=jonny2.equiparseItem(cascoVikingo) // (+10,0,0,0)
     val jonny4=jonny3.equiparseItem(talismanMinimalista)// (+50-10*inventario.size,0,0,0)
-    assertEquals(jonny4.atributos().hp,70)
+    assertEquals(jonny4.atributos.hp,70)
     assertEquals(jonny4.inventario.cantidadItems, 3)
   }
 
@@ -295,16 +295,16 @@ class ItemsTest {
   def vinchaDel_Bufalo_de_Agua_CumpleCondicion_MayorInteligencia(): Unit = {
     val jonny = new Heroe(new Stats (10,10,10,10))
     val jonny2=jonny.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
-    assertEquals(jonny2.atributos().hp,20)
-    assertEquals(jonny2.atributos().velocidad,20)
-    assertEquals(jonny2.atributos().fuerza,20)
+    assertEquals(jonny2.atributos.hp,20)
+    assertEquals(jonny2.atributos.velocidad,20)
+    assertEquals(jonny2.atributos.fuerza,20)
   }
 
   @Test
   def vinchaDel_Bufalo_de_Agua_CumpleCondicion_MayorFuerza(): Unit = {
     val jonny = new Heroe(new Stats  (10,20,10,10))
     val jonny2=jonny.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
-    assertEquals(jonny2.atributos().inteligencia,40)
+    assertEquals(jonny2.atributos.inteligencia,40)
   }
 
   @Test
@@ -312,7 +312,7 @@ class ItemsTest {
     val jonny = new Heroe(new Stats  (10,20,10,5))
     val jonny2=jonny.adquirirTrabajo(Guerrero)
     val jonny3=jonny2.equiparseItem(vinchaDelBufaloDeAgua)// (0,0,0,+30) o (+10,+10,+10,0)
-    assertEquals(jonny3.atributos().inteligencia,1)
+    assertEquals(jonny3.atributos.inteligencia,1)
   }
 
 
@@ -321,10 +321,10 @@ class ItemsTest {
   def talisman_Maldito(): Unit = {
     val jonny = new Heroe(new Stats(10,10,10,10))
     val jonny2=jonny.equiparseItem(talismanMaldito)// (1,1,1,1)
-    assertEquals(jonny2.atributos().hp,1)
-    assertEquals(jonny2.atributos().velocidad,1)
-    assertEquals(jonny2.atributos().fuerza,1)
-    assertEquals(jonny2.atributos().inteligencia,1)
+    assertEquals(jonny2.atributos.hp,1)
+    assertEquals(jonny2.atributos.velocidad,1)
+    assertEquals(jonny2.atributos.fuerza,1)
+    assertEquals(jonny2.atributos.inteligencia,1)
   }
 
   @Test
@@ -333,10 +333,10 @@ class ItemsTest {
     val jonny2=jonny.adquirirTrabajo(Mago)      //(0,-20,0,20)
     val jonny3=jonny2.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
     val jonny4=jonny3.equiparseItem(talismanMaldito)// (1,1,1,1)
-    assertEquals(jonny4.atributos().hp,1)
-    assertEquals(jonny4.atributos().velocidad,1)
-    assertEquals(jonny4.atributos().fuerza,1)
-    assertEquals(jonny4.atributos().inteligencia,1)
+    assertEquals(jonny4.atributos.hp,1)
+    assertEquals(jonny4.atributos.velocidad,1)
+    assertEquals(jonny4.atributos.fuerza,1)
+    assertEquals(jonny4.atributos.inteligencia,1)
   }
 
   @Test
@@ -345,10 +345,10 @@ class ItemsTest {
     val jonny2=jonny.adquirirTrabajo(Mago)      //(0,-20,0,20)
     val jonny3=jonny2.equiparseItem(armaduraEleganteSport)// (-30,0,+30,0)
     val jonny4=jonny3.equiparseItem(talismanMaldito)// (1,1,1,1)
-    assertEquals(jonny4.atributos().hp,1)
-    assertEquals(jonny4.atributos().fuerza,1)
-    assertEquals(jonny4.atributos().velocidad,1)
-    assertEquals(jonny4.atributos().inteligencia,1)
+    assertEquals(jonny4.atributos.hp,1)
+    assertEquals(jonny4.atributos.fuerza,1)
+    assertEquals(jonny4.atributos.velocidad,1)
+    assertEquals(jonny4.atributos.inteligencia,1)
   }
 
 
@@ -357,14 +357,14 @@ class ItemsTest {
   def espadaDeLa_Vida_conPocaVida_y_muchaFuerza(): Unit = {
     val jonny = new Heroe(new Stats  (10,100,10,10))
     val jonny2=jonny.equiparseItem(espadaDeLaVida)// (igual,igual,0,0)
-    assertEquals(jonny2.atributos().fuerza,10)
+    assertEquals(jonny2.atributos.fuerza,10)
   }
 
   @Test
   def espadaDeLa_Vida_conMuchaVida_y_pocaFuerza(): Unit = {
     val jonny = new Heroe(new Stats  (100,10,10,10))
     val jonny2=jonny.equiparseItem(espadaDeLaVida)// (igual,igual,0,0)
-    assertEquals(jonny2.atributos().fuerza,100)
+    assertEquals(jonny2.atributos.fuerza,100)
   }
 
 }

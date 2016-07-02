@@ -7,7 +7,7 @@ class Trabajo(hp: Int, fuerza: Int, velocidad: Int, inteligencia: Int, principal
       velocidad = e.velocidad + velocidad,
       inteligencia = e.inteligencia + inteligencia))
 
-  def valorAtributoPrincipal(): Int = {
+  def valorAtributoPrincipal: Int = {
     principal match {
       case Fuerza => fuerza
       case Inteligencia => inteligencia

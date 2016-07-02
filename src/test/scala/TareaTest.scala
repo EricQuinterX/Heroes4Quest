@@ -3,28 +3,28 @@ import org.junit.{Before, Test}
 
 class TareaTest {
 
-  val pelearContraMonstruo = (h: Heroe) => if (h.atributos().fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
-  val facilidadPelearContraMonstruo= (e: Equipo) => if (e.obtenerLider().lider.get.trabajaDe(Guerrero)) 20 else 10
+  val pelearContraMonstruo = (h: Heroe) => if (h.atributos.fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
+  val facilidadPelearContraMonstruo= (e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Guerrero)) 20 else 10
 
   val forzarPuerta = (h :Heroe) => {
     if (!h.trabajaDe(Mago) && !h.trabajaDe(Ladron))
       h.copy(stats = h.stats.setear(h.stats.copy(hp = h.stats.hp-5,fuerza = h.stats.fuerza+1)))
     else h
   }
-  val facilidadForzarPuerta = (h: Heroe, e: Equipo) => h.atributos().inteligencia + e.heroes.count(_.trabajaDe(Ladron))*10
+  val facilidadForzarPuerta = (h: Heroe, e: Equipo) => h.atributos.inteligencia + e.heroes.count(_.trabajaDe(Ladron))*10
 
   val robarTalisman = (unHeroe:Heroe, unItem:Item) =>  unHeroe.equiparseItem(unItem)
-  val facilidadRobarTalisman = (h: Heroe, e: Equipo) => if (e.obtenerLider().lider.get.trabajaDe(Ladron)) h.atributos().velocidad else -1
+  val facilidadRobarTalisman = (h: Heroe, e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
 
   val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
-  val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos().principal(h.trabajo)
+  val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos.principal(h.trabajo)
   val efecto_tareaDificl = (h: Heroe, e: Equipo) => {
     val s = h.stats
     val h1 = h.copy(stats = s.copy(hp = s.hp + 10))
     e.reemplazarMiembro(h1, h)
   }
 
-  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider().lider.get.atributos().velocidad > 50
+  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider.lider.get.atributos.velocidad > 50
   val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => h.stats.velocidad
   val efecto_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.copy(pozoDeOro = e.pozoDeOro + 100)
 
@@ -99,21 +99,21 @@ class TareaTest {
   //Desc: "reduce la vida de cualquier héroe con fuerza <20"
   @Test
   def pelearContraMonstruo_un_Guerrero(): Unit = {  //(10,15,0,-10)
-    assertEquals(pelearContraMonstruo(unGuerrero).atributos().hp,35)
+    assertEquals(pelearContraMonstruo(unGuerrero).atributos.hp,35)
   }
 
   @Test
   def pelearContraMonstruo_un_Ladron(): Unit = {   //(-5,0,10,0)
-    assertEquals(pelearContraMonstruo(unLadron).atributos().hp,20)
+    assertEquals(pelearContraMonstruo(unLadron).atributos.hp,20)
   }
 
   @Test
   def pelearContraMonstruo_un_Mago(): Unit = {   //(0,-20,0,20)
-    assertEquals(pelearContraMonstruo(unMago).atributos().hp,1)
+    assertEquals(pelearContraMonstruo(unMago).atributos.hp,1)
   }
   @Test
   def pelearContraMonstruo_un_SinTrabajo(): Unit = {
-    assertEquals(pelearContraMonstruo(unSinTrabajo).atributos().hp,25)
+    assertEquals(pelearContraMonstruo(unSinTrabajo).atributos.hp,25)
   }
 
 
@@ -147,22 +147,22 @@ class TareaTest {
   //Desc: "le agrega un talismán al héroe"
   @Test
   def robarTalisman_Con_unHeroeDe_Treinta_Cinco(): Unit = {  // + (10,0,0,0)
-    assertEquals(robarTalisman(unoDe_Treinta_Cinco, cascoVikingo).atributos().hp,45)
+    assertEquals(robarTalisman(unoDe_Treinta_Cinco, cascoVikingo).atributos.hp,45)
   }
 
   @Test
   def robarTalisman_Guerrero(): Unit = {   //+(10,15,0,-10) + (10,0,0,0)
-    assertEquals(robarTalisman(unGuerrero, cascoVikingo).atributos().hp,35)
+    assertEquals(robarTalisman(unGuerrero, cascoVikingo).atributos.hp,35)
   }
 
   @Test
   def robarTalisman_Ladron(): Unit = {   //(-5,0,10,0) + (10,0,0,0)
-    assertEquals(robarTalisman(unLadron, cascoVikingo).atributos().hp,20)
+    assertEquals(robarTalisman(unLadron, cascoVikingo).atributos.hp,20)
   }
 
   @Test
   def robarTalisman_Mago(): Unit = {   //(0,-20,0,20) + (10,0,0,0)
-    assertEquals(robarTalisman(unMago, cascoVikingo).atributos().hp,25)
+    assertEquals(robarTalisman(unMago, cascoVikingo).atributos.hp,25)
   }
 
   @Test
@@ -227,7 +227,7 @@ class TareaTest {
   def realizarTareaDificil(): Unit = {
     val tareaRealizada = tareaDificil.realizarTarea(losVeganos)
     assertEquals(tareaRealizada.resultado, TareaSuperada) // +10hp por tarea superada
-    assertEquals(tareaRealizada.equipo.get.obtenerLider().lider.get.stats.hp, 50)
+    assertEquals(tareaRealizada.equipo.get.obtenerLider.lider.get.stats.hp, 50)
   }
 
   @Test
