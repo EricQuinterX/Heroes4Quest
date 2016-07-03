@@ -8,18 +8,18 @@ class TabernaTest {
   //Punto 3
   val condicion_facilidad_Pelear = (e: Equipo)=> true
   val condicion_facilidad_Forzar = (e: Equipo) => true
-  val condicion_facilidad_Robar  = (e: Equipo) => e.obtenerLider.lider.get.trabajaDe(Ladron)
+  val condicion_facilidad_Robar  = (e: Equipo) => e.lider.get.trabajaDe(Ladron)
   val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
-  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider.lider.get.atributos.velocidad > 50
+  val condicion_elRegresoDeBroly = (e: Equipo) => e.lider.get.atributos.velocidad > 50
   val condicion_tanque = (e: Equipo) => e.heroes.size >= 2
   val condicion_nivel1 = (e: Equipo) => e.heroes.exists(_.stats.hp > 20)
   val condicion_nivel2 = (e: Equipo) => e.heroes.exists(_.atributos.fuerza > 100)
   val condicion_nivel3 = (e: Equipo) => e.pozoDeOro > 200
 
 
-  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Guerrero)) 20 else 10
+  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.lider.get.trabajaDe(Guerrero)) 20 else 10
   val facilidad_Valor_Forzar= (h: Heroe, e: Equipo) => h.atributos.inteligencia + e.heroes.count(_.trabajaDe(Ladron)) *10
-  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.obtenerLider.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
+  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
   val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos.principal(h.trabajo)
   val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => h.stats.velocidad
   val facilidad_tanque = (h: Heroe, e: Equipo) => h.stats.hp

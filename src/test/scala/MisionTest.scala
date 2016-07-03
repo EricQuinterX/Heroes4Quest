@@ -7,18 +7,18 @@ class MisionTest {
   //Punto 3
   val condicion_facilidad_Pelear = (e: Equipo)=> true
   val condicion_facilidad_Forzar = (e: Equipo) => true
-  val condicion_facilidad_Robar  = (e: Equipo) => e.obtenerLider.lider.get.trabajaDe(Ladron)
+  val condicion_facilidad_Robar  = (e: Equipo) => e.lider.get.trabajaDe(Ladron)
   val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
-  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider.lider.get.atributos.velocidad > 50
+  val condicion_elRegresoDeBroly = (e: Equipo) => e.lider.get.atributos.velocidad > 50
   val condicion_tanque = (e: Equipo) => e.heroes.size >= 2
   val condicion_nivel1 = (e: Equipo) => e.heroes.exists(_.stats.hp > 20)
   val condicion_nivel2 = (e: Equipo) => e.heroes.exists(_.atributos.fuerza > 100)
   val condicion_nivel3 = (e: Equipo) => e.pozoDeOro > 200
 
 
-  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Guerrero)) 20 else 10
+  val facilidad_Valor_Pelear = (h: Heroe, e: Equipo) => if (e.lider.get.trabajaDe(Guerrero)) 20 else 10
   val facilidad_Valor_Forzar= (h: Heroe, e: Equipo) => h.atributos.inteligencia + e.heroes.count(_.trabajaDe(Ladron)) *10
-  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.obtenerLider.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
+  val facilidad_Valor_Robar = (h: Heroe, e: Equipo) =>  if (e.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
   val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos.principal(h.trabajo)
   val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => h.stats.velocidad
   val facilidad_tanque = (h: Heroe, e: Equipo) => h.stats.hp
@@ -120,7 +120,7 @@ class MisionTest {
     val mision = mision_ZombiePlant.realizarMision(losVeganos)
     assertEquals(mision.resultado, MisionSuperada)
     assertEquals(mision.equipo.get.pozoDeOro, 1200)
-    val lider = mision.equipo.get.obtenerLider.lider
+    val lider = mision.equipo.get.lider
     assertEquals(Try(lider.get.atributos.hp) getOrElse 0, 50)
   }
 
@@ -175,7 +175,6 @@ class MisionTest {
   def realizarMision_VerificarMisionExitosa(): Unit ={
     val mision = mision_ZombiePlant.realizarMision(losVeganos)
     assertEquals(mision.resultado, MisionSuperada)
-    assertEquals(mision.equipo.get,
-      new Equipo("Los Veganos",List(Heroe(Stats(50,19,58,99),None,Inventario(List()),None), Heroe(Stats(60,95,30,10),None,Inventario(List()),None), Heroe(Stats(60,55,62,94),None,Inventario(List()),None)),1200,None)) //Vemos que los efectos son los correctos
+    assertEquals(mision.equipo.get, new Equipo("Los Veganos",List(Heroe(Stats(50,19,58,99)),Heroe(Stats(60,95,30,10)), Heroe(Stats(60,55,62,94))),1200)) //Vemos que los efectos son los correctos
   }
 }

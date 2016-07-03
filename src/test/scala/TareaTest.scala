@@ -4,7 +4,7 @@ import org.junit.{Before, Test}
 class TareaTest {
 
   val pelearContraMonstruo = (h: Heroe) => if (h.atributos.fuerza<20) h.copy(stats = h.stats.copy(hp = 1)) else h
-  val facilidadPelearContraMonstruo= (e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Guerrero)) 20 else 10
+  val facilidadPelearContraMonstruo= (e: Equipo) => if (e.lider.get.trabajaDe(Guerrero)) 20 else 10
 
   val forzarPuerta = (h :Heroe) => {
     if (!h.trabajaDe(Mago) && !h.trabajaDe(Ladron))
@@ -14,7 +14,7 @@ class TareaTest {
   val facilidadForzarPuerta = (h: Heroe, e: Equipo) => h.atributos.inteligencia + e.heroes.count(_.trabajaDe(Ladron))*10
 
   val robarTalisman = (unHeroe:Heroe, unItem:Item) =>  unHeroe.equiparseItem(unItem)
-  val facilidadRobarTalisman = (h: Heroe, e: Equipo) => if (e.obtenerLider.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
+  val facilidadRobarTalisman = (h: Heroe, e: Equipo) => if (e.lider.get.trabajaDe(Ladron)) h.atributos.velocidad else -1
 
   val condicion_tareaDificil = (e: Equipo) => e.heroes.size >= 2
   val facilidad_tareaDificil = (h: Heroe, e: Equipo) => h.atributos.principal(h.trabajo)
@@ -24,7 +24,7 @@ class TareaTest {
     e.reemplazarMiembro(h1, h)
   }
 
-  val condicion_elRegresoDeBroly = (e: Equipo) => e.obtenerLider.lider.get.atributos.velocidad > 50
+  val condicion_elRegresoDeBroly = (e: Equipo) => e.lider.get.atributos.velocidad > 50
   val facilidad_elRegresoDeBroly = (h: Heroe, e: Equipo) => h.stats.velocidad
   val efecto_elRegresoDeBroly = (h: Heroe, e: Equipo) => e.copy(pozoDeOro = e.pozoDeOro + 100)
 
@@ -227,7 +227,7 @@ class TareaTest {
   def realizarTareaDificil(): Unit = {
     val tareaRealizada = tareaDificil.realizarTarea(losVeganos)
     assertEquals(tareaRealizada.resultado, TareaSuperada) // +10hp por tarea superada
-    assertEquals(tareaRealizada.equipo.get.obtenerLider.lider.get.stats.hp, 50)
+    assertEquals(tareaRealizada.equipo.get.lider.get.stats.hp, 50)
   }
 
   @Test

@@ -1,6 +1,6 @@
 import scala.util.Try
 
-case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider: Option[Heroe] = None) {
+case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0){
 
   def mejorHeroeSegun(f: Heroe => Int): Option[Heroe] = Try(Some(heroes.maxBy(f(_)))) getOrElse None
 
@@ -24,19 +24,12 @@ case class Equipo (name: String, heroes: List[Heroe], pozoDeOro: Int = 0, lider:
 
   def reemplazarMiembro(nuevoHeroe: Heroe, viejoHeroe: Heroe) = copy(heroes= nuevoHeroe :: heroes.filter(_ != viejoHeroe))
 
-  def obtenerLider: Equipo = {
-    if (heroes.isEmpty) {
-      copy(lider = None)
-    }
-    else {
-      val posibleLider = heroes.foldLeft(heroes.head) { (resultado, heroe) =>
-        if (resultado.atributos.principal(resultado.trabajo) > heroe.atributos.principal(heroe.trabajo))
-          resultado
-        else heroe
-      }
-      val att_principal = posibleLider.atributos.principal(posibleLider.trabajo)
-      val otraLista = heroes.filter(x => x.atributos.principal(x.trabajo) == att_principal)
-      if (otraLista.size == 1) copy(lider = Some(posibleLider)) else copy(lider = None)
-    }
+  def lider : Option[Heroe]= heroes match {
+    case Nil => None
+    case hs =>
+      val candidato = hs.maxBy(h => h.atributos.principal(h.trabajo))
+      val ppal = candidato.atributos.principal(candidato.trabajo)
+      if (hs.count(h => h.atributos.principal(h.trabajo) == ppal) > 1) None
+      else Some(candidato)
   }
 }
