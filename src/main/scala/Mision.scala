@@ -23,4 +23,25 @@ case class Mision (tareas: List[Tarea],
     else
       copy(equipo = Some(unEquipo), resultado = MisionFallida, tareaFallida = Some(ultimaTareaFinalizada))
   }
+
+  def realizarMisionConUnaChance(unEquipo: Equipo):Mision ={
+
+    val listaDeMisionesFalladas =tareas.filter((t:Tarea)=> t.realizarTarea(unEquipo)==TareaFallida)
+
+    if (listaDeMisionesFalladas.size ==1){
+
+      val ultimaTareaFinalizada = tareas.tail.foldLeft(tareas.head.realizarTarea(unEquipo)) { (t1,t2) =>
+        t1 match {
+          case Tarea(_,_,_,_,Some(teamS), TareaSuperada) => t2.realizarTarea(teamS)
+          case Tarea(_,_,_,_,Some(teamS), TareaFallida) => t2.realizarTarea(teamS)
+        }
+      }
+
+      copy(equipo = Some(ultimaTareaFinalizada.equipo.get), resultado = MisionSuperada)
+
+    }else{
+      copy(equipo = Some(unEquipo), resultado = MisionFallida, tareaFallida = Some(listaDeMisionesFalladas.reverse.head))
+    }
+
+  }
 }
